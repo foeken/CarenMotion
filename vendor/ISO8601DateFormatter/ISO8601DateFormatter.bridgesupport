@@ -1,0 +1,86 @@
+<?xml version='1.0'?>
+<signatures version='1.0'>
+<constant name='ISO8601DefaultTimeSeparatorCharacter' declared_type='unichar' type='S'/>
+<enum name='ISO8601DateFormatCalendar' value='0'/>
+<enum name='ISO8601DateFormatOrdinal' value='1'/>
+<enum name='ISO8601DateFormatWeek' value='2'/>
+<class name='ISO8601DateFormatter'>
+<method selector='dateComponentsFromString:'>
+<arg name='string' declared_type='NSString*' type='@' index='0'/>
+<retval declared_type='NSDateComponents*' type='@'/>
+</method>
+<method selector='dateComponentsFromString:timeZone:'>
+<arg name='string' declared_type='NSString*' type='@' index='0'/>
+<arg name='outTimeZone' declared_type='NSTimeZone**' type='^@' index='1' type_modifier='o'/>
+<retval declared_type='NSDateComponents*' type='@'/>
+</method>
+<method selector='dateComponentsFromString:timeZone:range:'>
+<arg name='string' declared_type='NSString*' type='@' index='0'/>
+<arg name='outTimeZone' declared_type='NSTimeZone**' type='^@' index='1' type_modifier='o'/>
+<arg name='outRange' declared_type='NSRange*' type='^{_NSRange=II}' index='2' type_modifier='o'/>
+<retval declared_type='NSDateComponents*' type='@'/>
+</method>
+<method selector='dateFromString:'>
+<arg name='string' declared_type='NSString*' type='@' index='0'/>
+<retval declared_type='NSDate*' type='@'/>
+</method>
+<method selector='dateFromString:timeZone:'>
+<arg name='string' declared_type='NSString*' type='@' index='0'/>
+<arg name='outTimeZone' declared_type='NSTimeZone**' type='^@' index='1' type_modifier='o'/>
+<retval declared_type='NSDate*' type='@'/>
+</method>
+<method selector='dateFromString:timeZone:range:'>
+<arg name='string' declared_type='NSString*' type='@' index='0'/>
+<arg name='outTimeZone' declared_type='NSTimeZone**' type='^@' index='1' type_modifier='o'/>
+<arg name='outRange' declared_type='NSRange*' type='^{_NSRange=II}' index='2' type_modifier='o'/>
+<retval declared_type='NSDate*' type='@'/>
+</method>
+<method selector='defaultTimeZone'>
+<retval declared_type='NSTimeZone*' type='@'/>
+</method>
+<method selector='format'>
+<retval declared_type='ISO8601DateFormat' type='I'/>
+</method>
+<method selector='includeTime'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='parsesStrictly'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='purgeGlobalCaches' class_method='true'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setDefaultTimeZone:'>
+<arg name='defaultTimeZone' declared_type='NSTimeZone*' type='@' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setFormat:'>
+<arg name='format' declared_type='ISO8601DateFormat' type='I' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setIncludeTime:'>
+<arg name='includeTime' declared_type='BOOL' type='B' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setParsesStrictly:'>
+<arg name='parsesStrictly' declared_type='BOOL' type='B' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setTimeSeparator:'>
+<arg name='timeSeparator' declared_type='unichar' type='S' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='stringFromDate:'>
+<arg name='date' declared_type='NSDate*' type='@' index='0'/>
+<retval declared_type='NSString*' type='@'/>
+</method>
+<method selector='stringFromDate:timeZone:'>
+<arg name='date' declared_type='NSDate*' type='@' index='0'/>
+<arg name='timeZone' declared_type='NSTimeZone*' type='@' index='1'/>
+<retval declared_type='NSString*' type='@'/>
+</method>
+<method selector='timeSeparator'>
+<retval declared_type='unichar' type='S'/>
+</method>
+</class>
+</signatures>

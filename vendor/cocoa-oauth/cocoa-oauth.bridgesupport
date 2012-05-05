@@ -1,0 +1,48 @@
+<?xml version='1.0'?>
+<signatures version='1.0'>
+<class name='GCOAuth'>
+<method selector='URLRequestForPath:GETParameters:host:consumerKey:consumerSecret:accessToken:tokenSecret:' class_method='true'>
+<arg name='path' declared_type='NSString*' type='@' index='0'/>
+<arg name='parameters' declared_type='NSDictionary*' type='@' index='1'/>
+<arg name='host' declared_type='NSString*' type='@' index='2'/>
+<arg name='consumerKey' declared_type='NSString*' type='@' index='3'/>
+<arg name='consumerSecret' declared_type='NSString*' type='@' index='4'/>
+<arg name='accessToken' declared_type='NSString*' type='@' index='5'/>
+<arg name='tokenSecret' declared_type='NSString*' type='@' index='6'/>
+<retval declared_type='NSURLRequest*' type='@'/>
+</method>
+<method selector='URLRequestForPath:GETParameters:scheme:host:consumerKey:consumerSecret:accessToken:tokenSecret:' class_method='true'>
+<arg name='path' declared_type='NSString*' type='@' index='0'/>
+<arg name='parameters' declared_type='NSDictionary*' type='@' index='1'/>
+<arg name='scheme' declared_type='NSString*' type='@' index='2'/>
+<arg name='host' declared_type='NSString*' type='@' index='3'/>
+<arg name='consumerKey' declared_type='NSString*' type='@' index='4'/>
+<arg name='consumerSecret' declared_type='NSString*' type='@' index='5'/>
+<arg name='accessToken' declared_type='NSString*' type='@' index='6'/>
+<arg name='tokenSecret' declared_type='NSString*' type='@' index='7'/>
+<retval declared_type='NSURLRequest*' type='@'/>
+</method>
+<method selector='URLRequestForPath:POSTParameters:host:consumerKey:consumerSecret:accessToken:tokenSecret:' class_method='true'>
+<arg name='path' declared_type='NSString*' type='@' index='0'/>
+<arg name='parameters' declared_type='NSDictionary*' type='@' index='1'/>
+<arg name='host' declared_type='NSString*' type='@' index='2'/>
+<arg name='consumerKey' declared_type='NSString*' type='@' index='3'/>
+<arg name='consumerSecret' declared_type='NSString*' type='@' index='4'/>
+<arg name='accessToken' declared_type='NSString*' type='@' index='5'/>
+<arg name='tokenSecret' declared_type='NSString*' type='@' index='6'/>
+<retval declared_type='NSURLRequest*' type='@'/>
+</method>
+<method selector='setHTTPShouldHandleCookies:' class_method='true'>
+<arg name='handle' declared_type='BOOL' type='B' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setTimeStampOffset:' class_method='true'>
+<arg name='offset' declared_type='time_t' type='l' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setUserAgent:' class_method='true'>
+<arg name='agent' declared_type='NSString*' type='@' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+</class>
+</signatures>
