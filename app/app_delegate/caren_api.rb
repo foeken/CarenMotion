@@ -9,7 +9,7 @@ module AppDelegate
       RKObjectManager.sharedManager.client.OAuth1AccessToken = "UCJrZ1D9kACq5s4GM6FZda123thNkqYFmc6SlgJN"
       RKObjectManager.sharedManager.client.OAuth1AccessTokenSecret = "Qk0CUZkPUeP8dhBSTdHZRX9Xj7tg22Fzymn0C2mr"
     
-      # ISSUE: It seems to fail recognizing the defined constants
+      # ISSUE: It seems to fail recognizing the defined constants. BridgeSupport?
       RKObjectManager.sharedManager.client.authenticationType = 3 # RKRequestAuthenticationTypeOAuth1    
       RKObjectManager.sharedManager.acceptMIMEType = "application/xml" # RKMIMETypeXML
       RKObjectManager.sharedManager.serializationMIMEType = "application/xml" # RKMIMETypeXML
@@ -23,6 +23,8 @@ module AppDelegate
     
       # ISSUE: Calling CareProvider.all works from the console before the mapping is registered. If you call 
       # it after a CareProvider.register it crashes the app with no vsisible exception message.
+      
+      # ISSUE: The REPL no longer works in this example...
     
     end
   end

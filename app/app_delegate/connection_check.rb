@@ -18,10 +18,7 @@ module AppDelegate
       @hostReachable = Reachability.reachabilityWithHostName("www.caren-cares.com")
       @hostReachable.startNotifier
         
-      NSNotificationCenter.defaultCenter.addObserver self, 
-                                                     selector:"checkNetworkStatus",
-                                                     name:kReachabilityChangedNotification,
-                                                     object:nil
+      Notification.subscribe kReachabilityChangedNotification, action:"checkNetworkStatus", observer:self
     end
   
     def checkNetworkStatus notice
@@ -42,9 +39,9 @@ module AppDelegate
       @connectionActive = @internetActive && @hostActive
     
       if @connectionActive
-        NSNotificationCenter.defaultCenter.postNotificationName("DeviceIsOnline", object:nil)
+        Notification.post "DeviceIsOnlineNotification"
       else
-        NSNotificationCenter.defaultCenter.postNotificationName("DeviceIsOffline", object:nil)
+        Notification.post "DeviceIsOfflineNotification"
       end
     end  
   end

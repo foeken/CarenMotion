@@ -27,17 +27,6 @@ class GUI
     end
   end
   
-  def self.show controller
-    GUI.show(controller, modalTransitionStyle:UIModalTransitionStyleCoverVertical)
-  end
-  
-  def self.show controller, modalTransitionStyle:modalTransitionStyle
-    navigation = UINavigationController.alloc.initWithRootViewController( controller )
-    navigation.modalTransitionStyle = modalTransitionStyle
-    GUI.customizeNavigationController(navigation, backgroundImage:"navigationbar_background.png")
-    appDelegate.navigationController.presentModalViewController(navigation, animated:true)
-  end
-  
   def self.squareBarButtonItemWithTitle title, backgroundImage:backgroundImage, 
                                                backgroundImageTapped:backgroundImageTapped, 
                                                target:target, 

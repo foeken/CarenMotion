@@ -31,9 +31,9 @@ class SplashView < UIImageView
     if appDelegate.connectionActive
       case indexPath.row
       when SIGN_IN_ROW
-        GUI.show SignInController.alloc.init
+        GUI.showController SignInController.alloc.init
       when REGISTER_ROW
-        GUI.show RegisterController.alloc.init
+        GUI.showController RegisterController.alloc.init
       end
     else    
       alert _("No internet connection"), _("You can't do this without an internet connection.")
@@ -45,7 +45,7 @@ class SplashView < UIImageView
   def tableView(tableView, numberOfRowsInSection:section) ; 2 ; end
     
   def tableView(tableView, cellForRowAtIndexPath:indexPath)
-    GUI.dequeueOrDefaultNavigationCellForTableView(@tableView) do |cell|
+    GUI.dequeueOrDefaultNavigationCellForTableView(@tableView,"NavigationCell") do |cell|
       case indexPath.row
       when SIGN_IN_ROW
         cell.imageView.image = UIImage.imageNamed("icon_existing_user.png")
@@ -54,7 +54,6 @@ class SplashView < UIImageView
         cell.imageView.image = UIImage.imageNamed("icon_new_user.png")
         cell.text = _("I'm new to Caren")
       end
-      cell
     end
   end
   

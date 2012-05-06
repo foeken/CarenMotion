@@ -1,15 +1,39 @@
 class GUI
   
-  def self.dequeueOrDefaultNavigationCellForTableView tableView, &block
-    tableView.dequeueReusableCellWithIdentifier("CellIdentifier") || begin
-      cell = defaultNavigationCellWithIdentifier("CellIdentifier")
-      yield(cell)
+  def self.scrollTableView tableView, toRow:row
+    scrollTableView(tableView, toRow:row, inSection:0)
+  end
+  
+  def self.scrollTableView tableView, toRow:row, inSection:section
+    tableView.scrollToRowAtIndexPath NSIndexPath.indexPathForRow(row, inSection:section),
+                                     atScrollPosition:UITableViewScrollPositionMiddle, 
+                                     animated:true
+  end
+  
+  def self.dequeueOrDefaultNavigationCellForTableView tableView, identifier, &block
+    tableView.dequeueReusableCellWithIdentifier(identifier) || begin
+      cell = defaultNavigationCellWithIdentifier(identifier)
+      yield(cell) if block_given?
+      return cell
+    end
+  end
+  
+  def self.dequeueOrDefaultCellForTableView tableView, identifier, &block
+    tableView.dequeueReusableCellWithIdentifier(identifier) || begin
+      cell = defaultCellWithIdentifier(identifier)
+      yield(cell) if block_given?
+      return cell
     end
   end
   
   def self.defaultNavigationCellWithIdentifier identifier
-    cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:identifier)
+    cell = defaultCellWithIdentifier(identifier)
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator
+    return cell
+  end
+  
+  def self.defaultCellWithIdentifier identifier
+    cell = UITableViewCell.alloc.initWithStyle(UITableViewCellStyleDefault, reuseIdentifier:identifier)
     cell.selectionStyle = UITableViewCellSelectionStyleNone
     cell.textLabel.font = labelFont
     return cell
