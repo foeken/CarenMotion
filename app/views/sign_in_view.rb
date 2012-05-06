@@ -1,4 +1,4 @@
-class SignInView < UIImageView
+class SignInView < DefaultView
   
   include TableViewWithScrolling
   
@@ -10,10 +10,9 @@ class SignInView < UIImageView
   
   def initWithFrame(rect)
     if super
-      self.image = UIImage.imageNamed('background_stripes.png')
-      self.userInteractionEnabled = true
       drawFields
       drawImage
+      setupScrolling
     end
     self
   end
@@ -34,21 +33,15 @@ class SignInView < UIImageView
   end
   
   def drawFields
-    position = [[0.0, 0.0], [320.0, (460.0 - 44.0)]]
-    @tableView = GUI.defaultTableViewWithFrame(position, dataSource:self, delegate:self)
+    @tableView = GUI.defaultTableViewWithFrame(GUI.defaultTableViewPosition, dataSource:self, delegate:self)
     self.addSubview(@tableView)
     
-    position = [[8, ((43.0 - 20.0) / 2) + 0.5], [280.0, 20.0]]
+    position = GUI.defaultFieldPositionInCell
     
-    @emailTextField = GUI.emailFieldWithFrame(position, delegate:self, placeholder:_("Email address"))    
+    @emailTextField = GUI.emailFieldWithFrame(position, delegate:self, placeholder:_("Email address"))
     @passwordTextField = GUI.passwordFieldWithFrame(position, delegate:self, placeholder:_("Password"))
-
-    @emailTextField.returnKeyType = UIReturnKeyNext
     @passwordTextField.returnKeyType = UIReturnKeyDone
-    
-    Notification.subscribe UIKeyboardWillShowNotification, action:"decreaseTableViewFrame", observer:self
-    Notification.subscribe UIKeyboardWillHideNotification, action:"increaseTableViewFrame", observer:self
-    
+        
     @emailTextField.addTarget(self, action:"scrollToFirstResponder", forControlEvents:UIControlEventEditingDidBegin)
     @passwordTextField.addTarget(self, action:"scrollToFirstResponder", forControlEvents:UIControlEventEditingDidBegin)
   end
@@ -56,10 +49,7 @@ class SignInView < UIImageView
   # ##########################
   # UITableView delegate methods
   # ##########################
-  
-  def tableView(tableView, didSelectRowAtIndexPath:indexPath)
-  end
-  
+    
   def tableView(tableView, heightForRowAtIndexPath:indexPath) ; 44 ; end
 
   def tableView(tableView, numberOfRowsInSection:section) ; 3 ; end

@@ -1,5 +1,13 @@
 class GUI
   
+  def self.defaultTableViewPosition
+    [[0.0, 0.0], [320.0, (460.0 - 44.0)]]
+  end
+  
+  def self.defaultFieldPositionInCell
+    [[8, ((43.0 - 20.0) / 2) + 0.5], [280.0, 20.0]]
+  end
+  
   def self.scrollTableView tableView, toRow:row
     scrollTableView(tableView, toRow:row, inSection:0)
   end

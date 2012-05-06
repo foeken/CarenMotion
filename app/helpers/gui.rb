@@ -27,10 +27,24 @@ class GUI
     end
   end
   
-  def self.squareBarButtonItemWithTitle title, backgroundImage:backgroundImage, 
-                                               backgroundImageTapped:backgroundImageTapped, 
-                                               target:target, 
-                                               action:action
+  def self.squareCancelBarButtonWithTarget target, action:action
+    squareBarButtonWithTitle _("Cancel"), backgroundImage:"navigationbar_button_normal.png",
+                                          backgroundImageTapped:"navigationbar_button_light.png",
+                                          target:target,
+                                          action:action
+  end
+  
+  def self.squareBarButtonWithTitle title, target:target, action:action
+    squareBarButtonWithTitle title, backgroundImage:"navigationbar_button_light.png",
+                                    backgroundImageTapped:"navigationbar_button_normal.png",
+                                    target:target,
+                                    action:action
+  end
+  
+  def self.squareBarButtonWithTitle title, backgroundImage:backgroundImage,
+                                           backgroundImageTapped:backgroundImageTapped,
+                                           target:target,
+                                           action:action
         
     button = UIButton.buttonWithType(UIButtonTypeCustom)
     backgroundImage = UIImage.imageNamed(backgroundImage).stretchableImageWithLeftCapWidth(6, topCapHeight:0)

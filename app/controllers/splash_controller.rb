@@ -2,6 +2,7 @@ class SplashController < UIViewController
   
   def loadView
     self.view = SplashView.alloc.init
+    self.view.controller = self
     self.view.setNeedsDisplay
   end
   

@@ -2,6 +2,11 @@ module TableViewWithScrolling
   
   attr_accessor :tableView
   
+  def setupScrolling
+    Notification.subscribe UIKeyboardWillShowNotification, action:"decreaseTableViewFrame", observer:self
+    Notification.subscribe UIKeyboardWillHideNotification, action:"increaseTableViewFrame", observer:self
+  end
+  
   def scrollToFirstResponder
     if firstResponder = self.findFirstResponder
       indexPath = @tableView.indexPathForCell( findFirstResponder.superview.superview )
