@@ -1,0 +1,120 @@
+<?xml version='1.0'?>
+<signatures version='1.0'>
+<constant name='kReachabilityChangedNotification' declared_type='NSString*' const='true' type='@'/>
+<enum name='NotReachable' value='0'/>
+<enum name='ReachableViaWWAN' value='1'/>
+<enum name='ReachableViaWiFi' value='2'/>
+<class name='Reachability'>
+<method selector='connectionRequired'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='currentReachabilityFlags'>
+<retval declared_type='NSString*' type='@'/>
+</method>
+<method selector='currentReachabilityStatus'>
+<retval declared_type='NetworkStatus' type='i'/>
+</method>
+<method selector='currentReachabilityString'>
+<retval declared_type='NSString*' type='@'/>
+</method>
+<method selector='initWithReachabilityRef:'>
+<arg name='ref' declared_type='SCNetworkReachabilityRef' type='^{__SCNetworkReachability=}' index='0'/>
+<retval declared_type='Reachability*' type='@'/>
+</method>
+<method selector='isConnectionOnDemand'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='isConnectionRequired'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='isInterventionRequired'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='isReachable'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='isReachableViaWWAN'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='isReachableViaWiFi'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='reachabilityFlags'>
+<retval declared_type='SCNetworkReachabilityFlags' type='I'/>
+</method>
+<method selector='reachabilityForInternetConnection' class_method='true'>
+<retval declared_type='Reachability*' type='@'/>
+</method>
+<method selector='reachabilityForLocalWiFi' class_method='true'>
+<retval declared_type='Reachability*' type='@'/>
+</method>
+<method selector='reachabilityObject'>
+<retval declared_type='id' type='@'/>
+</method>
+<method selector='reachabilityRef'>
+<retval declared_type='SCNetworkReachabilityRef' type='^{__SCNetworkReachability=}'/>
+</method>
+<method selector='reachabilitySerialQueue'>
+<retval declared_type='dispatch_queue_t' type='^{dispatch_queue_s=}'/>
+</method>
+<method selector='reachabilityWithAddress:' class_method='true'>
+<arg name='hostAddress' declared_type='struct sockaddr_in*' const='true' type='^{sockaddr_in=CCS{in_addr=I}[8c]}' index='0'/>
+<retval declared_type='Reachability*' type='@'/>
+</method>
+<method selector='reachabilityWithHostname:' class_method='true'>
+<arg name='hostname' declared_type='NSString*' type='@' index='0'/>
+<retval declared_type='Reachability*' type='@'/>
+</method>
+<method selector='reachableBlock'>
+<retval function_pointer='true' declared_type='NetworkReachable' type='@?'>
+<arg declared_type='Reachability*' type='@'/>
+<retval declared_type='void' type='v'/>
+</retval>
+</method>
+<method selector='reachableOnWWAN'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='setReachabilityObject:'>
+<arg name='reachabilityObject' declared_type='id' type='@' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setReachabilityRef:'>
+<arg name='reachabilityRef' declared_type='SCNetworkReachabilityRef' type='^{__SCNetworkReachability=}' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setReachabilitySerialQueue:'>
+<arg name='reachabilitySerialQueue' declared_type='dispatch_queue_t' type='^{dispatch_queue_s=}' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setReachableBlock:'>
+<arg name='reachableBlock' function_pointer='true' declared_type='NetworkReachable' type='@?' index='0'>
+<arg declared_type='Reachability*' type='@'/>
+<retval declared_type='void' type='v'/>
+</arg>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setReachableOnWWAN:'>
+<arg name='reachableOnWWAN' declared_type='BOOL' type='B' index='0'/>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='setUnreachableBlock:'>
+<arg name='unreachableBlock' function_pointer='true' declared_type='NetworkUnreachable' type='@?' index='0'>
+<arg declared_type='Reachability*' type='@'/>
+<retval declared_type='void' type='v'/>
+</arg>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='startNotifier'>
+<retval declared_type='BOOL' type='B'/>
+</method>
+<method selector='stopNotifier'>
+<retval declared_type='void' type='v'/>
+</method>
+<method selector='unreachableBlock'>
+<retval function_pointer='true' declared_type='NetworkUnreachable' type='@?'>
+<arg declared_type='Reachability*' type='@'/>
+<retval declared_type='void' type='v'/>
+</retval>
+</method>
+</class>
+</signatures>

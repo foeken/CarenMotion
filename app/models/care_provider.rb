@@ -1,6 +1,3 @@
-class EmptyClass
-end
-
 class CareProvider
   
   # attr_accessor :id, :name, :address_line, :website, :email, :telephone
