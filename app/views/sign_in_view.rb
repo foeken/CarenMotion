@@ -1,18 +1,15 @@
 class SignInView < DefaultView
   
-  include TableViewWithScrolling
-  
-  EMAIL_ROW = 0
-  PASSWORD_ROW = 1
-  FORGOT_PASSWORD_ROW = 2
-  
+  include TableViewBuilder
+  include TableViewBuilder::KeyboardScrolling
+  attr_accessor :tableView
+    
   attr_accessor :emailTextField, :passwordTextField
   
   def initWithFrame(rect)
     if super
       drawFields
       drawImage
-      setupScrolling
     end
     self
   end
@@ -41,32 +38,36 @@ class SignInView < DefaultView
     @emailTextField = GUI.emailFieldWithFrame(position, delegate:self, placeholder:_("Email address"))
     @passwordTextField = GUI.passwordFieldWithFrame(position, delegate:self, placeholder:_("Password"))
     @passwordTextField.returnKeyType = UIReturnKeyDone
-        
-    @emailTextField.addTarget(self, action:"scrollToFirstResponder", forControlEvents:UIControlEventEditingDidBegin)
-    @passwordTextField.addTarget(self, action:"scrollToFirstResponder", forControlEvents:UIControlEventEditingDidBegin)
+    
+    enableScrollingOn [@emailTextField, @passwordTextField]
   end
   
-  # ##########################
-  # UITableView delegate methods
-  # ##########################
-    
-  def tableView(tableView, heightForRowAtIndexPath:indexPath) ; 44 ; end
-
-  def tableView(tableView, numberOfRowsInSection:section) ; 3 ; end
-    
-  def tableView(tableView, cellForRowAtIndexPath:indexPath)    
-    case indexPath.row
-    when EMAIL_ROW        
-      cell = GUI.dequeueOrDefaultCellForTableView(@tableView,"EmailCell")
-      cell.contentView.addSubview @emailTextField
-    when PASSWORD_ROW
-      cell = GUI.dequeueOrDefaultCellForTableView(@tableView,"PaswordCell")
-      cell.contentView.addSubview @passwordTextField      
-    when FORGOT_PASSWORD_ROW
-      cell = GUI.dequeueOrDefaultNavigationCellForTableView(@tableView,"NavigationCell")
-      cell.text = _("I forgot my password")
-    end    
-    return cell
+  TableViewBuilder do |table|
+    table.section do |section|
+      section.row do |row|
+        row.reuseIdentifier = "EmailCell"
+        row.cellBuilder = lambda do |row,base|
+          cell = GUI.defaultCellWithIdentifier row.reuseIdentifier
+          cell.contentView.addSubview base.emailTextField
+          cell
+        end
+      end
+      section.row do |row|
+        row.reuseIdentifier = "PasswordCell"
+        row.cellBuilder = lambda do |row,base|
+          cell = GUI.defaultCellWithIdentifier row.reuseIdentifier
+          cell.contentView.addSubview base.passwordTextField
+          cell
+        end
+      end
+      section.row do |row|
+        row.title = _("I forgot my password")
+        row.reuseIdentifier = "EmailCell"
+        row.cellBuilder = lambda do |row,base|
+          GUI.defaultNavigationCellWithIdentifier row.reuseIdentifier
+        end
+      end
+    end
   end
   
   def textFieldShouldReturn textField

@@ -1,10 +1,8 @@
 class SplashView < UIImageView
-
-  SIGN_IN_ROW = 0
-  REGISTER_ROW = 1
-
+  
+  include TableViewBuilder
   attr_accessor :tableView
-
+  
   def initWithFrame(rect)
     if super
       self.image = UIImage.imageNamed('background_welcome.png')
@@ -21,40 +19,42 @@ class SplashView < UIImageView
     self.addSubview(@tableView)
   end
     
-  # ##########################
-  # UITableView delegate methods
-  # ##########################
-  
-  def tableView(tableView, didSelectRowAtIndexPath:indexPath)
-    tableView.deselectRowAtIndexPath(indexPath, animated:true)
-    
-    if appDelegate.connectionActive
-      case indexPath.row
-      when SIGN_IN_ROW
-        GUI.showController SignInController.alloc.init
-      when REGISTER_ROW
-        GUI.showController RegisterController.alloc.init
+  TableViewBuilder do |table|
+    table.section do |section|
+      section.row do |row|
+        row.title = _("I'm already a Caren user")
+        row.reuseIdentifier = "NavigationCell"
+        row.cellBuilder = lambda do |row,base|
+          cell = GUI.defaultNavigationCellWithIdentifier("NavigationCell")
+          cell.imageView.image = UIImage.imageNamed("icon_new_user.png")
+          cell
+        end
+        row.action = lambda do
+          if appDelegate.connectionActive
+            GUI.showController SignInController.alloc.init
+          else
+            alert _("No internet connection"), _("You can't do this without an internet connection.")
+          end          
+        end
       end
-    else    
-      alert _("No internet connection"), _("You can't do this without an internet connection.")
+      
+      section.row do |row|
+        row.title = _("I'm new to Caren")
+        row.reuseIdentifier = "NavigationCell"
+        row.cellBuilder = lambda do |row,base|
+          cell = GUI.defaultNavigationCellWithIdentifier("NavigationCell")
+          cell.imageView.image = UIImage.imageNamed("icon_existing_user.png")
+          cell
+        end
+        row.action = lambda do
+          if appDelegate.connectionActive
+            GUI.showController RegisterController.alloc.init
+          else
+            alert _("No internet connection"), _("You can't do this without an internet connection.")
+          end
+        end
+      end
     end
   end
-  
-  def tableView(tableView, heightForRowAtIndexPath:indexPath) ; 44 ; end
 
-  def tableView(tableView, numberOfRowsInSection:section) ; 2 ; end
-    
-  def tableView(tableView, cellForRowAtIndexPath:indexPath)
-    GUI.dequeueOrDefaultNavigationCellForTableView(@tableView,"NavigationCell") do |cell|
-      case indexPath.row
-      when SIGN_IN_ROW
-        cell.imageView.image = UIImage.imageNamed("icon_existing_user.png")
-        cell.text = _("I'm already a Caren user")
-      when REGISTER_ROW
-        cell.imageView.image = UIImage.imageNamed("icon_new_user.png")
-        cell.text = _("I'm new to Caren")
-      end
-    end
-  end
-  
 end

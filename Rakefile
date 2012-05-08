@@ -16,7 +16,7 @@ Motion::Project::App.setup do |app|
   # ISSUE: Reachability says it yields no .a files and does not continue
   
   app.pods do
-    # dependency 'Reachability'
+    dependency 'Reachability'
     # dependency 'RestKit/ObjectMapping/XML'
   end
   

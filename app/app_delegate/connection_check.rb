@@ -2,16 +2,18 @@ module AppDelegate
   module ConnectionCheck  
     attr_accessor :internetReachable, :hostReachable
     attr_accessor :internetActive, :hostActive, :connectionActive
-  
+        
     # Check if the internet is reachable. Also does a check if our host is available.
     def setupConnectionCheck
+            
+      # ISSUE: Reachability now builds and is available. But most methods do not work.
       
-      # ISSUE: Reachability does not compile
       @internetActive = true
       @hostActive = true
       @connectionActive = true
-      return
       
+      return
+            
       @internetReachable = Reachability.reachabilityForInternetConnection
       @internetReachable.startNotifier
     

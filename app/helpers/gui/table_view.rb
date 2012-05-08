@@ -17,23 +17,7 @@ class GUI
                                      atScrollPosition:UITableViewScrollPositionMiddle, 
                                      animated:true
   end
-  
-  def self.dequeueOrDefaultNavigationCellForTableView tableView, identifier, &block
-    tableView.dequeueReusableCellWithIdentifier(identifier) || begin
-      cell = defaultNavigationCellWithIdentifier(identifier)
-      yield(cell) if block_given?
-      return cell
-    end
-  end
-  
-  def self.dequeueOrDefaultCellForTableView tableView, identifier, &block
-    tableView.dequeueReusableCellWithIdentifier(identifier) || begin
-      cell = defaultCellWithIdentifier(identifier)
-      yield(cell) if block_given?
-      return cell
-    end
-  end
-  
+    
   def self.defaultNavigationCellWithIdentifier identifier
     cell = defaultCellWithIdentifier(identifier)
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator
