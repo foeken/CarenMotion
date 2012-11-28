@@ -1,23 +1,27 @@
 module Caren
-  class Base
-
-    attr_accessor :attributes
+  class Base < NSManagedObject
 
     def initialize args={}
-      self.attributes = {}
       self.class.keys.each do |key|
         if args.has_key?(key)
-          self.attributes[key] = args[key]
+          self.send "#{key}=", args[key]
         elsif args.has_key?(key.to_s)
-          self.attributes[key] = args[key.to_s]
+          self.send "#{key}=", args[key.to_s]
         else
-          self.attributes[key] = nil
+          self.send "#{key}=", nil
         end
       end
     end
 
+    def self.key(*vars)
+      @keys ||= []
+      @keys.concat vars
+    end
+
+    key :createdAt, :updatedAt
+
     def self.keys
-      [:createdAt, :updatedAt]
+      @keys
     end
 
     def self.resourceUrl id=nil
@@ -25,9 +29,7 @@ module Caren
     end
 
     def self.objectLoader objectLoader, didLoadObjects:objects
-      p "SUCCESS"
       p objects
-      objects
     end
 
     def self.objectLoader objectLoader, didFailWithError:error
@@ -37,15 +39,32 @@ module Caren
     end
 
     def self.register session
-      session.manager.mappingProvider.setMapping(mapping, forKeyPath:rootKeyPath)
+      session.manager.mappingProvider.setMapping(mapping(session), forKeyPath:rootKeyPath)
     end
 
-    def self.mapping
-      objectMapping = RKObjectMapping.mappingForClass(self)
+    def self.entity
+      @entity ||= begin
+        entity = NSEntityDescription.alloc.init
+        entity.name = self.name
+        entity.managedObjectClassName = self.name
+        entity.properties = keys.map do |key|
+          property = NSAttributeDescription.alloc.init
+          property.name = key.to_s
+          property.attributeType = NSStringAttributeType
+          property.optional = true
+          property
+        end
+        entity
+    end
+  end
+
+    def self.mapping session
+      objectMapping = RKManagedObjectMapping.mappingForEntity(self.entity, inManagedObjectStore:session.storage)
       keys.each do |key|
-        objectMapping.mapKeyPath key.to_s.underscore.gsub("_","-"), toAttribute:key.to_s
+        objectMapping.mapKeyPath key.to_s.underscore.gsub("_","-")+".text", toAttribute:key.to_s
       end
-      objectMapping.ignoreUnknownKeyPaths = true
+      objectMapping.primaryKeyAttribute = "id"
+      objectMapping.ignoreUnknownKeyPaths = false
       objectMapping.rootKeyPath = rootKeyPath
       return objectMapping
     end

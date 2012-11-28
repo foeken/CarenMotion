@@ -15,8 +15,7 @@ Motion::Project::App.setup do |app|
   app.files_dependencies 'app/controllers/default_controller.rb' => 'app/helpers/loading_view.rb'
 
   app.pods do
-    pod 'Reachability'
-    pod "RestKit"
+    pod "Reachability"
     pod "RestKit/XML"
     pod "KeychainItemWrapper"
   end

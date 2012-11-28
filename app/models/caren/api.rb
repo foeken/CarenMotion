@@ -6,17 +6,19 @@ module Caren
     KEY       = "o2HHwSflL8myngwy8yv3fGNfLSAPmpx6I4Bc0N0w"
     SECRET    = "eDeXOI0l79YhXiO3BFe8eHZxLDuXFsANDjG9iMI6"
 
-    attr_accessor :manager, :keychain
+    attr_accessor :manager, :keychain, :storage
 
     def initialize
-      #RKParserRegistry.sharedRegistry.setParserClass RKXMLParserLibXML, forMIMEType:"application/xml"
+      @storage = RKManagedObjectStore.objectStoreWithStoreFilename "caren.sqlite"
 
       @manager = RKObjectManager.objectManagerWithBaseURL(NSURL.alloc.initWithString("https://#{SITE}"))
       @manager.client.OAuth1ConsumerKey = KEY
       @manager.client.OAuth1ConsumerSecret = SECRET
+      @manager.client.requestQueue.showsNetworkActivityIndicatorWhenBusy = true
       @manager.client.authenticationType = RKRequestAuthenticationTypeOAuth1
       @manager.acceptMIMEType = RKMIMETypeXML
       @manager.serializationMIMEType = RKMIMETypeXML
+      @manager.objectStore = @storage
 
       @keychain = KeychainItemWrapper.alloc.initWithIdentifier KEYCHAIN, accessGroup: nil
       setAccessTokenAndSecret
