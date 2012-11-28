@@ -22,7 +22,7 @@ module AppDelegate
 
     def setupConnectionCheck
       @internetReachable = Reachability.reachabilityForInternetConnection
-      @hostReachable     = Reachability.reachabilityWithHostname("www.caren-cares.com")
+      @hostReachable     = Reachability.reachabilityWithHostname(Caren::Api::SITE)
 
       @internetReachable.startNotifier
       @hostReachable.startNotifier

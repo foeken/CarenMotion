@@ -1,1 +1,0 @@
-../../RestKit/Code/UI/RKRefreshTriggerView.h

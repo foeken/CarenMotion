@@ -22,4 +22,12 @@ module Kernel
                                     otherButtonTitles: nil).show
   end
 
+  def subscribe name, action
+    Notification.subscribe name, action:action, observer:self
+  end
+
+  def unsubscribe name
+    Notification.unsubscribe name, observer:self
+  end
+
 end

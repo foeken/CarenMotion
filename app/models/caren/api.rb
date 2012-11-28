@@ -1,22 +1,27 @@
 module Caren
   class Api
 
-    SITE   = "caren-cares.com"
-    KEY    = "o2HHwSflL8myngwy8yv3fGNfLSAPmpx6I4Bc0N0w"
-    SECRET = "eDeXOI0l79YhXiO3BFe8eHZxLDuXFsANDjG9iMI6"
+    KEYCHAIN  = "CarenAccessTokenAndSecret"
+    SITE      = "caren-cares.com"
+    KEY       = "o2HHwSflL8myngwy8yv3fGNfLSAPmpx6I4Bc0N0w"
+    SECRET    = "eDeXOI0l79YhXiO3BFe8eHZxLDuXFsANDjG9iMI6"
 
     attr_accessor :manager, :keychain
 
     def initialize
-      @manager = RKObjectManager.objectManagerWithBaseURL(NSURL.alloc.initWithString(SITE))
+      #RKParserRegistry.sharedRegistry.setParserClass RKXMLParserLibXML, forMIMEType:"application/xml"
+
+      @manager = RKObjectManager.objectManagerWithBaseURL(NSURL.alloc.initWithString("https://#{SITE}"))
       @manager.client.OAuth1ConsumerKey = KEY
       @manager.client.OAuth1ConsumerSecret = SECRET
       @manager.client.authenticationType = RKRequestAuthenticationTypeOAuth1
       @manager.acceptMIMEType = RKMIMETypeXML
       @manager.serializationMIMEType = RKMIMETypeXML
 
-      @keychain = KeychainItemWrapper.alloc.initWithIdentifier 'CarenAccessTokenAndSecret', accessGroup: nil
+      @keychain = KeychainItemWrapper.alloc.initWithIdentifier KEYCHAIN, accessGroup: nil
       setAccessTokenAndSecret
+
+      Person.register(self)
     end
 
     def accessTokenAndSecretAvailable?
@@ -29,14 +34,24 @@ module Caren
     end
 
     def getAccessTokenForUsername username, andPassword: password
-      Notification.subscribe "XAuthSucceeded", action:"storeAndSetAccessTokenAndSecret:", observer:self
+      subscribe "XAuthFailed", "getAccessTokenFailed:"
+      subscribe "XAuthSucceeded", "storeAndSetAccessTokenAndSecret:"
       Caren::XAuth.alloc.initializeWithUsername username, andPassword: password
+    end
+
+    def getAccessTokenFailed notification
+      unsubscribe "XAuthFailed"
+      unsubscribe "XAuthSucceeded"
+      Notification.post "GetAccessTokenFailed", notification.object
     end
 
     def storeAndSetAccessTokenAndSecret notification
       @keychain.setObject notification.object["oauth_token"], forKey: KSecAttrAccount
       @keychain.setObject notification.object["oauth_token_secret"], forKey: KSecValueData
       setAccessTokenAndSecret
+      unsubscribe "XAuthFailed"
+      unsubscribe "XAuthSucceeded"
+      Notification.post "GetAccessTokenSucceeded"
     end
 
   end

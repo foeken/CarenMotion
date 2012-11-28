@@ -2,8 +2,8 @@ class SignInView < DefaultView
 
   include TableViewBuilder
   include TableViewBuilder::KeyboardScrolling
-  attr_accessor :tableView
 
+  attr_accessor :tableView
   attr_accessor :emailTextField, :passwordTextField
 
   def initWithFrame(rect)

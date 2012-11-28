@@ -1,9 +1,0 @@
-<?xml version='1.0'?>
-<signatures version='1.0'>
-<enum name='FileHashDefaultChunkSizeForReadingData' value='4096'/>
-<function name='FileMD5HashCreateWithPath'>
-<arg name='filePath' declared_type='CFStringRef' type='^{__CFString=}'/>
-<arg name='chunkSizeForReadingData' declared_type='size_t' type='L'/>
-<retval declared_type='CFStringRef' already_retained='true' type='^{__CFString=}'/>
-</function>
-</signatures>

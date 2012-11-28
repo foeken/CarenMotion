@@ -33,12 +33,15 @@ module Caren
 
     def connectionDidFinishLoading(connection)
       body = NSString.alloc.initWithData @data, encoding:NSUTF8StringEncoding
-      Notification.post "XAuthSucceeded", Hash[body.split('&').map{ |x| x.split('=') }]
+      if body == "Invalid OAuth Request"
+        Notification.post "XAuthFailed"
+      else
+        Notification.post "XAuthSucceeded", Hash[body.split('&').map{ |x| x.split('=') }]
+      end
     end
 
     def connection(connection, didFailWithError:error)
-      puts error.localizedDescription
-      Notification.post "XAuthFailed"
+      Notification.post "XAuthFailed", error
     end
 
   end

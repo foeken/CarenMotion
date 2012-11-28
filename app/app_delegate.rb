@@ -7,10 +7,10 @@ class AppDelegate
 
   def application(application, didFinishLaunchingWithOptions:launchOptions)
 
-    @caren = Caren::Api.new
-
     setupConnectionCheck
     setupKeyboard
+
+    @caren = Caren::Api.new
 
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
     @window.rootViewController = self.navigationController
@@ -21,7 +21,12 @@ class AppDelegate
   end
 
   def navigationController
-    @navigationController ||= UINavigationController.alloc.initWithRootViewController( SplashController.alloc.init )
+    if @caren.accessTokenAndSecretAvailable?
+      # We should show the actual APP controller here
+      @navigationController ||= UINavigationController.alloc.initWithRootViewController( SplashController.alloc.init )
+    else
+      @navigationController ||= UINavigationController.alloc.initWithRootViewController( SplashController.alloc.init )
+    end
   end
 
 end
