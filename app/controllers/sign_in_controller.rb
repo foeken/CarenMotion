@@ -15,7 +15,9 @@ class SignInController < DefaultController
 
   def clickedSignInButton
     self.view.dismissKeyboard
-    # TODO: Handle sign in
+    caren.getAccessTokenForUsername self.view.emailTextField.text, andPassword: self.view.passwordTextField.text
+    # Set loading state
+    # Setup subscription so the loading state is removed and we log in
   end
 
 end

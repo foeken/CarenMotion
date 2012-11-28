@@ -1,0 +1,59 @@
+
+PODS:
+- FileMD5Hash (0.0.1)
+- ISO8601DateFormatter (0.6)
+- JSONKit (1.5pre)
+- KeychainItemWrapper (1.2)
+- LibComponentLogging-Core (1.3.1)
+- LibComponentLogging-NSLog (1.0.4):
+  - LibComponentLogging-Core (>= 1.1.6)
+- NSData+Base64 (1.0.0)
+- Reachability (3.1.0)
+- RestKit (0.10.3):
+  - RestKit/JSON (= 0.10.3)
+- RestKit/JSON (0.10.3):
+  - RestKit/Network
+  - RestKit/ObjectMapping/CoreData
+  - RestKit/ObjectMapping/JSON
+  - RestKit/UI
+- RestKit/Network (0.10.3):
+  - FileMD5Hash
+  - LibComponentLogging-NSLog (>= 1.0.4)
+  - SOCKit
+  - cocoa-oauth
+- RestKit/ObjectMapping/CoreData (0.10.3):
+  - ISO8601DateFormatter (>= 0.6)
+  - RestKit/Network
+- RestKit/ObjectMapping/JSON (0.10.3):
+  - ISO8601DateFormatter (>= 0.6)
+  - JSONKit (>= 1.5pre)
+  - RestKit/Network
+- RestKit/UI (0.10.3)
+- SOCKit (1.1)
+- cocoa-oauth (0.0.1):
+  - NSData+Base64 (~> 1.0)
+
+DEPENDENCIES:
+- KeychainItemWrapper
+- Reachability
+- RestKit
+
+SPEC CHECKSUMS:
+  FileMD5Hash: c3b015e6fb293eea0a0c276747f61f20408c2644
+  ISO8601DateFormatter: dc05a2481edf49668d85d3ff8c466c32eb544780
+  JSONKit: a01a22c75f27eae76b4badd55a91c20fe6e86477
+  KeychainItemWrapper: f537d5bec950b2ab815c80cef9bf4e30a1084dc8
+  LibComponentLogging-Core: 344f6045453ca28fa8f2909eb9624ec9d15ef256
+  LibComponentLogging-NSLog: a4bb0f6de612eef7b5fcdbd9cc96dc868ba1f2df
+  NSData+Base64: 8b910cb8a64f45daec6fb15936c36a9a911c57ca
+  Reachability: 1c8584c5f26fa776695efef95caaa50402c94cfb
+  RestKit: 1fb57eb941d7d2587648491507a0bcaeb70b67f2
+  RestKit/JSON: 1fb57eb941d7d2587648491507a0bcaeb70b67f2
+  RestKit/Network: 1fb57eb941d7d2587648491507a0bcaeb70b67f2
+  RestKit/ObjectMapping/CoreData: 1fb57eb941d7d2587648491507a0bcaeb70b67f2
+  RestKit/ObjectMapping/JSON: 1fb57eb941d7d2587648491507a0bcaeb70b67f2
+  RestKit/UI: 1fb57eb941d7d2587648491507a0bcaeb70b67f2
+  SOCKit: 179515c1a621dd5652a60e9be02ea4adcd25bc9b
+  cocoa-oauth: 8f4c8b77c77ac660de37f8125557c4ec09b0118a
+
+COCOAPODS: 0.16.0

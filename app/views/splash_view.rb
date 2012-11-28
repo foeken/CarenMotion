@@ -1,8 +1,8 @@
 class SplashView < UIImageView
-  
+
   include TableViewBuilder
   attr_accessor :tableView
-  
+
   def initWithFrame(rect)
     if super
       self.image = UIImage.imageNamed('background_welcome.png')
@@ -11,14 +11,14 @@ class SplashView < UIImageView
     end
     self
   end
-  
+
   def drawNavigation
-    position = [[0.0, (460.0 - 99.0 - 50.0)], [320.0, 99.0]]    
+    position = [[0.0, (Device.screen.height - 99.0 - 70.0)], [Device.screen.width, 99.0]]
     @tableView = GUI.defaultTableViewWithFrame(position, dataSource:self, delegate:self)
     @tableView.scrollEnabled = false
     self.addSubview(@tableView)
   end
-    
+
   TableViewBuilder do |table|
     table.section do |section|
       section.row do |row|
@@ -34,10 +34,10 @@ class SplashView < UIImageView
             GUI.showController SignInController.alloc.init
           else
             alert _("No internet connection"), _("You can't do this without an internet connection.")
-          end          
+          end
         end
       end
-      
+
       section.row do |row|
         row.title = _("I'm new to Caren")
         row.reuseIdentifier = "NavigationCell"

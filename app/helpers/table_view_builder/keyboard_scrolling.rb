@@ -1,12 +1,14 @@
 module TableViewBuilder
-  module KeyboardScrolling
+end
+
+  module TableViewBuilder::KeyboardScrolling
 
     def init
       Notification.subscribe UIKeyboardWillShowNotification, action:"decreaseTableViewFrame", observer:self
       Notification.subscribe UIKeyboardWillHideNotification, action:"increaseTableViewFrame", observer:self
       super
     end
-    
+
     def enableScrollingOn fields
       fields.each do |field|
         field.addTarget(self, action:"scrollToFirstResponder", forControlEvents:UIControlEventEditingDidBegin)
@@ -21,7 +23,7 @@ module TableViewBuilder
         @tableView.setContentOffset [0,0], animated:true
       end
     end
-    
+
     # Decrease the size of the tableview so it fits between the keyboard
     def decreaseTableViewFrame
       GUI.withKeyboardAnimation do
@@ -29,7 +31,7 @@ module TableViewBuilder
       end
       self.performSelector "scrollToFirstResponder", withObject:nil, afterDelay:0.1
     end
-    
+
     # Increase the size of the tableview to the full bounds
     def increaseTableViewFrame
       GUI.withKeyboardAnimation do
@@ -41,6 +43,5 @@ module TableViewBuilder
     def dismissKeyboard
       firstResponder.resignFirstResponder if firstResponder = self.findFirstResponder
     end
-    
+
   end
-end

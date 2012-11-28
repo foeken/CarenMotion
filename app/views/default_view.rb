@@ -1,5 +1,5 @@
 class DefaultView < UIImageView
-  
+
   def initWithFrame(rect)
     if super
       self.image = UIImage.imageNamed('background_stripes.png')
@@ -7,5 +7,5 @@ class DefaultView < UIImageView
     end
     self
   end
-  
+
 end

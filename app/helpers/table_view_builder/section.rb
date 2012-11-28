@@ -1,15 +1,17 @@
-class TableViewBuilder::Section
-  attr_accessor :header, :footer, :rows, :height
-  attr_accessor :headerBuilder, :footerBuilder
+module TableViewBuilder
+  class Section
+    attr_accessor :header, :footer, :rows, :height
+    attr_accessor :headerBuilder, :footerBuilder
 
-  def initialize
-    @rows = []
-    @height = 0
-  end
+    def initialize
+      @rows = []
+      @height = 0
+    end
 
-  def row
-    newRow = TableViewBuilder::Row.new
-    yield newRow
-    @rows << newRow
+    def row
+      newRow = Row.new
+      yield newRow
+      @rows << newRow
+    end
   end
 end

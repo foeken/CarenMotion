@@ -1,20 +1,20 @@
 module TableViewBuilder
-  
+
   module ClassMethods
     def TableViewBuilder
-      @table = TableViewBuilder::Table.new
+      @table = ::TableViewBuilder::Table.new
       yield @table
     end
-    
+
     def table
       @table
     end
   end
-  
+
   def self.included(child)
     child.extend ClassMethods
   end
-  
+
   def table
     @table ||= self.class.table
   end
@@ -22,10 +22,10 @@ module TableViewBuilder
   def tableView(tableView, cellForRowAtIndexPath:path)
     return unless table
     row = table.rowWithPath(path)
-    
+
     cell = tableView.dequeueReusableCellWithIdentifier(row.reuseIdentifier)
     cell = row.cellBuilder.call(row,self) unless cell
-    
+
     cell.reuseIdentifier = row.reuseIdentifier
     cell.textLabel.text = row.title
     cell.detailTextLabel.text = row.detail if cell.detailTextLabel
@@ -36,7 +36,7 @@ module TableViewBuilder
   def numberOfSectionsInTableView(tableView)
     table ? table.sections.count : 0
   end
-  
+
   def tableView(tableView, heightForHeaderInSection:section)
     table ? table.sections[section].height : 0
   end
@@ -56,7 +56,7 @@ module TableViewBuilder
     end
     return nil
   end
-  
+
   def tableView(tableView, viewForHeaderInSection:section)
     section = table.sections[section]
     if section.headerBuilder
@@ -78,7 +78,7 @@ module TableViewBuilder
     end
     return nil
   end
-  
+
   def tableView(tableView, viewForFooterInSection:section)
     section = table.sections[section]
     if section.footerBuilder
