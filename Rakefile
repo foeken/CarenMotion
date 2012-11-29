@@ -12,12 +12,11 @@ Motion::Project::App.setup do |app|
   app.detect_dependencies = false
   app.deployment_target = '6.0'
 
-  app.files_dependencies 'app/controllers/default_controller.rb' => 'app/helpers/loading_view.rb'
-
   app.pods do
     pod "Reachability"
     pod "RestKit/XML"
     pod "KeychainItemWrapper"
+    pod "SVProgressHUD"
   end
 
   app.entitlements['keychain-access-groups'] = [

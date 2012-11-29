@@ -30,4 +30,12 @@ module Kernel
     Notification.unsubscribe name, observer:self
   end
 
+  def setLoading(toggle)
+    if toggle
+      SVProgressHUD.showWithStatus(_("Loading"), maskType:SVProgressHUDMaskTypeGradient)
+    else
+      SVProgressHUD.dismiss
+    end
+  end
+
 end

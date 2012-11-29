@@ -1,7 +1,5 @@
 class DefaultController < UIViewController
 
-  include LoadingView
-
   attr_accessor :cancelButton
 
   def loadView

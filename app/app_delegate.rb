@@ -10,7 +10,7 @@ class AppDelegate
     setupConnectionCheck
     setupKeyboard
 
-    @caren = Caren::Api.new
+    @caren = Caren::Api.new( "CarenAccessTokenAndSecret", "caren.sqlite" )
 
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
     @window.rootViewController = self.navigationController
