@@ -9,10 +9,52 @@ module Caren
 
     def initialize keychain_identifier, database
       @keychain = KeychainItemWrapper.alloc.initWithIdentifier keychain_identifier, accessGroup: nil
+
+      @http_client = AFXAuthClient.alloc.initWithBaseURL NSURL.URLWithString("https://#{SITE}"),
+                                                         key: KEY,
+                                                         secret: SECRET
+
+      setAccessToken if hasCredentials?
     end
 
-    def accessTokenAndSecretAvailable?
-      false
+    def getAccessTokenForUsername username, andPassword: password
+      @http_client.authorizeUsingXAuthWithAccessTokenPath "/oauth/access_token",
+                                                          accessMethod: "POST",
+                                                          username: username,
+                                                          password: password,
+                                                          success: (lambda do |token|
+                                                                      Notification.post "GetAccessTokenSucceeded"
+                                                                      setAndStoreAccessToken(token)
+                                                                   end),
+                                                          failure: lambda{ |error| Notification.post "GetAccessTokenFailed", error }
+    end
+
+    def hasCredentials?
+      accessTokenKey && accessTokenSecret
+    end
+
+    private
+
+    def setAccessToken
+      @http_client.token = accessToken
+    end
+
+    def setAndStoreAccessToken token
+      @keychain.setObject token.key, forKey: KSecAttrAccount
+      @keychain.setObject token.secret, forKey: KSecValueData
+      setAccessToken
+    end
+
+    def accessTokenKey
+      @keychain.objectForKey(KSecAttrAccount)
+    end
+
+    def accessTokenSecret
+      @keychain.objectForKey(KSecValueData)
+    end
+
+    def accessToken
+      AFXAuthToken.alloc.initWithKey accessTokenKey, secret: accessTokenSecret
     end
 
   end

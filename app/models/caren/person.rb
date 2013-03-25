@@ -1,11 +1,11 @@
 module Caren
-  class Person < Caren::Base
+  class Person < Base
 
-    attr_accessor :id, :ownerId, :firstName, :lastName, :male, :password, :newPassword, :oldPassword
-    attr_accessor :email, :dateOfBirth, :photo, :bio, :note, :timeZone, :account, :linkProtocol, :me
-    attr_accessor :receivesCare, :eventRemindersViaEmailEnabled, :eventRemindersViaPhoneEnabled
-    attr_accessor :messageNotificationsViaEmailEnabled, :messageNotificationsViaphoneEnabled
-    attr_accessor :createdAt, :updatedAt
+    key :id, :ownerId, :firstName, :lastName, :male, :password, :newPassword, :oldPassword
+    key :email, :dateOfBirth, :photo, :bio, :note, :timeZone, :account, :linkProtocol, :me
+    key :receivesCare, :eventRemindersViaEmailEnabled, :eventRemindersViaPhoneEnabled
+    key :messageNotificationsViaEmailEnabled, :messageNotificationsViaphoneEnabled
+    key :createdAt, :updatedAt
 
   end
 end

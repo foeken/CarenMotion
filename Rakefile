@@ -20,9 +20,10 @@ Motion::Project::App.setup do |app|
 
   app.pods do
     pod "Reachability"
-    pod "RestKit"
     pod "KeychainItemWrapper"
     pod "SVProgressHUD"
+    pod "AFNetworking"
+    pod "AFXAuthClient"
   end
 
   app.entitlements['keychain-access-groups'] = [

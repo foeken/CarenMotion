@@ -23,7 +23,7 @@ class AppDelegate
   end
 
   def navigationController
-    if caren.accessTokenAndSecretAvailable?
+    if caren.hasCredentials?
       # We should show the actual APP controller here
       @navigationController ||= UINavigationController.alloc.initWithRootViewController( SplashController.alloc.init )
     else
