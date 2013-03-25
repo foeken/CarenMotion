@@ -10,8 +10,6 @@ class AppDelegate
     setupConnectionCheck
     setupKeyboard
 
-    @caren = Caren::Api.new( "CarenAccessTokenAndSecret", "caren.sqlite" )
-
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
     @window.rootViewController = self.navigationController
     @window.rootViewController.wantsFullScreenLayout = true
@@ -20,8 +18,12 @@ class AppDelegate
     true
   end
 
+  def caren
+    @caren ||= Caren::Api.new( "CarenAccessTokenAndSecret", "caren.sqlite" )
+  end
+
   def navigationController
-    if @caren.accessTokenAndSecretAvailable?
+    if caren.accessTokenAndSecretAvailable?
       # We should show the actual APP controller here
       @navigationController ||= UINavigationController.alloc.initWithRootViewController( SplashController.alloc.init )
     else
