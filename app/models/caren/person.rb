@@ -1,19 +1,37 @@
 module Caren
   class Person < Base
 
-    key :id, :ownerId, :firstName, :lastName, :male, :password, :newPassword, :oldPassword
-    key :email, :dateOfBirth, :photo, :bio, :note, :timeZone, :account, :linkProtocol, :me
-    key :receivesCare, :eventRemindersViaEmailEnabled, :eventRemindersViaPhoneEnabled
-    key :messageNotificationsViaEmailEnabled, :messageNotificationsViaPhoneEnabled
-    key :createdAt, :updatedAt
+    property :id, ::NSInteger64AttributeType, :required => true
+    property :ownerId, ::NSInteger64AttributeType
+    property :firstName, ::NSStringAttributeType
+    property :lastName, ::NSStringAttributeType
+    property :male, ::NSBooleanAttributeType
 
-    def self.find id, session
-      session.get resource_path(id), nil, lambda{ |request,response,doc| puts Caren::Person.from_xml(doc).email }, lambda{ |request,response,error,doc| puts doc }
-    end
+    property :email, ::NSStringAttributeType
+    property :account, ::NSBooleanAttributeType
+    property :me, ::NSBooleanAttributeType
+    property :receivesCare, ::NSBooleanAttributeType
 
-    # def create session
-    #   session.post "/api/people.xml", nil, lambda{ |request,response,doc| puts doc }, lambda{ |request,response,error,doc| puts doc }
-    # end
+    property :dateOfBirth, ::NSDateAttributeType
+    property :photo, ::NSStringAttributeType
+    property :timeZone, ::NSStringAttributeType
+
+    property :bio, ::NSStringAttributeType
+    property :note, ::NSStringAttributeType
+
+    property :eventRemindersViaEmailEnabled, ::NSBooleanAttributeType
+    property :eventRemindersViaPhoneEnabled, ::NSBooleanAttributeType
+    property :messageNotificationsViaEmailEnabled, ::NSBooleanAttributeType
+    property :messageNotificationsViaPhoneEnabled, ::NSBooleanAttributeType
+
+    property :createdAt, ::NSDateAttributeType
+    property :updatedAt, ::NSDateAttributeType
+
+    # Non tracked fields
+    property :password
+    property :newPassword
+    property :oldPassword
+    property :linkProtocol
 
     def self.array_root
       :people

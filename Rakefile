@@ -14,6 +14,7 @@ Motion::Project::App.setup do |app|
   app.icons = ['icon.png','icon@2x.png']
   app.detect_dependencies = false
   app.deployment_target = '6.0'
+  app.frameworks += ['CoreData']
   # app.pixate.user = pixate_settings[:user]
   # app.pixate.key = pixate_settings[:key]
   # app.pixate.framework = 'vendor/PXEngine.framework'

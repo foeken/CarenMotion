@@ -1,28 +1,37 @@
 module Caren
-  class Base
+  class Base < ::NSManagedObject
 
-    def self.key(*vars)
-      @keys ||= []
-      @keys.concat vars
-      attr_accessor *vars
+    def self.remote
+      @remote ||= Caren::Remote::Proxy.new(self, array_root, node_root, properties)
     end
 
-    def self.keys
-      @keys
-    end
-
-    def self.from_xml doc
-      error_pointer = Pointer.new(:object)
-      array_nodes  = doc.nodesForXPath("//#{array_root}/#{node_root}", error: error_pointer)
-      single_nodes = doc.nodesForXPath("//#{node_root}", error: error_pointer)
-      if array_nodes.length > 0
-        return array_nodes.map{ |n| object_from_node(n) }
-      elsif single_nodes.length > 0
-        return object_from_node(single_nodes.first)
+    def self.property(name, type=nil, options={})
+      @properties ||= {}
+      @properties[name] = options.merge(:type => type)
+      if type
+        define_method "#{name}"  { managed_instance.send("#{name}") }
+        define_method "#{name}=" { |args| managed_instance.send("#{name}=", args) }
       else
-        raise "Unexpected response."
+        attr_accessor name
       end
-      nil
+    end
+
+    def attributes
+      {}.tap do |attributes|
+        self.class.properties.keys.each do |key|
+          attributes[key] = send(key)
+        end
+      end
+    end
+
+    def attributes= attributes
+      attributes.each do |key,value|
+        send("#{key}=",value)
+      end
+    end
+
+    def self.properties
+      @properties
     end
 
     def self.array_root
@@ -33,22 +42,42 @@ module Caren
       :object
     end
 
-    def self.resources_path
-      "/api/#{array_root}"
+    # CoreData Methods
+
+    def initialize(instance)
+      @managed_instance = instance
+      super()
     end
 
-    def self.resource_path id
-      "#{resources_path}/#{id}"
+    def managed_instance
+      @managed_instance #||= Caren::Storage.shared.build_instance(self.class.node_root)
     end
 
-    def self.xml_to_key xml
-      xml.to_s.gsub("-","_").camelize(false)
+    def destroy
+      !!Caren::Storage.shared.delete_instance(managed_instance) if managed_instance
     end
 
-    def self.object_from_node node
-      self.new.tap do |object|
-        node.children.each do |child_node|
-          object.send("#{xml_to_key(child_node.name)}=",child_node.stringValue) rescue nil
+    def self.find id
+      new Caren::Storage.shared.find_instance(self.node_root, id)
+    end
+
+    def self.find_or_initialize id
+      new Caren::Storage.shared.find_or_initialize_instance(self.node_root, id)
+    end
+
+    def self.entity
+      @entity ||= begin
+        ::NSEntityDescription.new.tap do |entity|
+          entity.name = self.node_root
+          entity.managedObjectClassName = self.name
+          entity.properties = properties.map do |key,options|
+            next unless options[:type]
+            property = ::NSAttributeDescription.new
+            property.name = key
+            property.attributeType = options[:type]
+            property.optional = (options[:required].nil? ? true : !options[:required])
+            property
+          end.compact
         end
       end
     end
