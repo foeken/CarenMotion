@@ -11,6 +11,7 @@ class SplashController < UIViewController
     if appDelegate.caren.hasCredentials?
       # Show the actual UI
       puts "YEah baby! Login tokens available. We should be showing application UI!"
+      Caren::Person.find(4, appDelegate.caren)
     end
   end
 

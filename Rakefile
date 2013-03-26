@@ -24,6 +24,7 @@ Motion::Project::App.setup do |app|
     pod "SVProgressHUD"
     pod "AFNetworking"
     pod "AFXAuthClient"
+    pod "AFKissXMLRequestOperation"
   end
 
   app.entitlements['keychain-access-groups'] = [

@@ -5,7 +5,7 @@ module Caren
     KEY       = "o2HHwSflL8myngwy8yv3fGNfLSAPmpx6I4Bc0N0w"
     SECRET    = "eDeXOI0l79YhXiO3BFe8eHZxLDuXFsANDjG9iMI6"
 
-    attr_accessor :keychain
+    attr_accessor :keychain, :http_client
 
     def initialize keychain_identifier, database
       @keychain = KeychainItemWrapper.alloc.initWithIdentifier keychain_identifier, accessGroup: nil
@@ -33,7 +33,29 @@ module Caren
       accessTokenKey && accessTokenSecret
     end
 
+    def get path, parameters, success, failure
+      http_method "GET", path, parameters, success, failure
+    end
+
+    def post path, parameters, success, failure
+      http_method "POST", path, parameters, success, failure
+    end
+
+    def put path, parameters, success, failure
+      http_method "PUT", path, parameters, success, failure
+    end
+
+    def delete path, parameters, success, failure
+      http_method "DELETE", path, parameters, success, failure
+    end
+
     private
+
+    def http_method method, path, parameters, success, failure
+      request = @http_client.requestWithMethod(method, path: path, parameters: parameters)
+      operation = ::AFKissXMLRequestOperation.XMLDocumentRequestOperationWithRequest request, success: success, failure: failure
+      http_client.enqueueHTTPRequestOperation(operation)
+    end
 
     def setAccessToken
       @http_client.token = accessToken
