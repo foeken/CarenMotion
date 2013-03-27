@@ -1,6 +1,7 @@
 module Caren
   class Base
 
+    # New objects are found and created in this context by default
     def self.storage_context
       @storage_context ||= Caren::StorageContext.shared
     end
@@ -62,7 +63,7 @@ module Caren
     end
 
     def destroy
-      !!self.class.storage_context.delete_instance(managed_instance) if managed_instance
+      managed_instance ? !!self.class.storage_context.delete_instance(managed_instance) : false
     end
 
     def self.find id
@@ -71,6 +72,18 @@ module Caren
       else
         nil
       end
+    end
+
+    def ==(other)
+      id == other.id && other.is_a?(self.class)
+    end
+
+    def eql?(other)
+      self == other
+    end
+
+    def hash
+      "#{self.class.name}-#{id.to_s}".hash
     end
 
     def self.all limit=nil, offset=nil
@@ -92,9 +105,9 @@ module Caren
             property.name = key
             property.attributeType = options[:type]
             property.optional = (options[:required].nil? ? true : !options[:required])
-            # property.default = options[:default] if options[:default]
-            # property.transient = options[:transient] if options[:transient]
-            # property.indexed = options[:indexed] if options[:indexed]
+            property.default = options[:default] if options[:default]
+            property.transient = options[:transient] if options[:transient]
+            property.indexed = options[:indexed] if options[:indexed]
             property
           end.compact
         end

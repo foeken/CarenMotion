@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/qrush/motion-layout
+  revision: 22be71e17eda60bd1b537fbdb3910bd37ef63d9b
+  specs:
+    motion-layout (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -50,4 +56,5 @@ PLATFORMS
 DEPENDENCIES
   bubble-wrap
   motion-cocoapods
+  motion-layout!
   motion-pixate

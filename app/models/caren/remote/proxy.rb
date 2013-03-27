@@ -59,16 +59,21 @@ module Caren
             attributes[key.to_sym] = value
           end
         end
-        object = @klass.new(@storage_context.find_or_initialize_instance(@node_root,attributes[:id]))
-        object.attributes = attributes
-        object
+        @klass.new(@storage_context.find_or_initialize_instance(@node_root,attributes[:id])).tap do |object|
+          object.attributes = attributes
+        end
       end
 
       private
 
       def import_xml doc
+        # Puts the new or updated objects on the save stack
         added_or_updated_objects = from_xml(doc)
-        # TODO: We should remove items that where not returned here.
+
+        # Marks the extra objects for deletion
+        (@klass.all - added_or_updated_objects).map(&:destroy)
+
+        # Commit the save
         @storage_context.persist!
       end
 

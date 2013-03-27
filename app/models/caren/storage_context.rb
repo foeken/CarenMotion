@@ -1,3 +1,4 @@
+# We have a single persistent store with multiple contexts (one per thread: shared and api)
 module Caren
   class StorageContext
 
@@ -5,7 +6,6 @@ module Caren
       @storage ||= Caren::StorageContext.new
     end
 
-    # We seperate the api storage since it will be running in a different thread
     def self.api
       @storage_api ||= Caren::StorageContext.new
     end
@@ -16,6 +16,10 @@ module Caren
           instance.send("#{key}=",value)
         end
       end
+    end
+
+    def delete_instance instance
+      context.deleteObject(instance)
     end
 
     def find_instance name, id
@@ -62,7 +66,7 @@ module Caren
       raise "Error when saving the model: #{error_ptr[0].description}" unless context.save(error_ptr)
     end
 
-    # The actual persistant storage
+    # The actual persistant storage, can only be defined once.
 
     def self.stored_classes
       @stored_classes ||= {}.tap do |stored_classes|

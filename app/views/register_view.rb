@@ -25,6 +25,7 @@ class RegisterView < DefaultView
     @lastNameTextField = GUI.textFieldWithFrame(position, delegate:self, placeholder:_("Last name"))
     @emailTextField = GUI.emailFieldWithFrame(position, delegate:self, placeholder:_("Email address"))
     @passwordTextField = GUI.textFieldWithFrame(position, delegate:self, placeholder:_("Password"))
+    @receivesCareSwitch = UISwitch.alloc.init
 
     @passwordTextField.returnKeyType = UIReturnKeyDone
 
@@ -83,11 +84,42 @@ class RegisterView < DefaultView
         headerView
       end
       section.row do |row|
+        row.reuseIdentifier = "SexCell"
+        row.cellBuilder = lambda do |row,base|
+          cell = GUI.defaultCellWithIdentifier row.reuseIdentifier
+          label = UILabel.alloc.init
+          label.text = _("Tap to change")
+          label.backgroundColor = UIColor.clearColor
+          label.font = GUI.fieldFont
+          Motion::Layout.new do |layout|
+            layout.view cell.contentView
+            layout.subviews "label" => label
+            layout.vertical "|[label]|"
+            layout.horizontal "|-10-[label]-10-|"
+          end
+          cell
+        end
       end
     end
 
     table.section do |section|
       section.row do |row|
+        row.reuseIdentifier = "ReceiveCareCell"
+        row.cellBuilder = lambda do |row,base|
+          cell = GUI.defaultCellWithIdentifier row.reuseIdentifier
+          label = UILabel.alloc.init
+          label.text = _("I receive care myself")
+          label.backgroundColor = UIColor.clearColor
+          label.font = GUI.fieldFont
+          Motion::Layout.new do |layout|
+            layout.view cell.contentView
+            layout.subviews "switch" => base.receivesCareSwitch, "label" => label
+            layout.vertical "|-8-[switch]-8-|"
+            layout.vertical "|[label]|"
+            layout.horizontal "|-10-[label]-10-[switch]-10-|"
+          end
+          cell
+        end
       end
     end
 
