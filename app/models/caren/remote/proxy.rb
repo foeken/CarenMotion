@@ -7,10 +7,11 @@ module Caren
         @array_root = array_root
         @node_root = node_root
         @properties = properties
+        @storage_context = Caren::StorageContext.api
       end
 
       def import session
-        session.get resources_path, nil, lambda{ |request,response,doc| import_xml(doc) }, lambda{ |request,response,error,doc| puts doc }
+        session.get resources_path, nil, lambda{ |request,response,doc| import_xml(doc) }, lambda{ |request,response,error,doc| puts doc ; puts 'aap' }
       end
 
       def resources_path
@@ -30,7 +31,7 @@ module Caren
         elsif single_nodes.length > 0
           return object_from_node(single_nodes.first)
         else
-          raise "Unexpected response."
+          raise "Unexpected response"
         end
         nil
       end
@@ -58,7 +59,7 @@ module Caren
             attributes[key.to_sym] = value
           end
         end
-        object = @klass.new(Caren::Storage.shared.find_or_initialize_instance(@node_root,attributes[:id]))
+        object = @klass.new(@storage_context.find_or_initialize_instance(@node_root,attributes[:id]))
         object.attributes = attributes
         object
       end
@@ -66,8 +67,9 @@ module Caren
       private
 
       def import_xml doc
-        from_xml(doc)
-        Caren::Storage.shared.persist!
+        added_or_updated_objects = from_xml(doc)
+        # TODO: We should remove items that where not returned here.
+        @storage_context.persist!
       end
 
     end

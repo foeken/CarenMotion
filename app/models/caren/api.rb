@@ -29,8 +29,16 @@ module Caren
                                                           failure: lambda{ |error| Notification.post "GetAccessTokenFailed", error }
     end
 
+    def self.available_classes
+      [Caren::Person]
+    end
+
+    def import
+      self.class.available_classes.each{ |k| k.remote.import(self) }
+    end
+
     def hasCredentials?
-      accessTokenKey && accessTokenSecret
+      accessTokenKey.present? && accessTokenSecret.present?
     end
 
     def get path, parameters, success, failure

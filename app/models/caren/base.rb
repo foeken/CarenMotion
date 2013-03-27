@@ -1,8 +1,16 @@
 module Caren
-  class Base < ::NSManagedObject
+  class Base
+
+    def self.storage_context
+      @storage_context ||= Caren::StorageContext.shared
+    end
 
     def self.remote
       @remote ||= Caren::Remote::Proxy.new(self, array_root, node_root, properties)
+    end
+
+    def self.local
+      @managed_instance
     end
 
     def self.property(name, type=nil, options={})
@@ -50,19 +58,27 @@ module Caren
     end
 
     def managed_instance
-      @managed_instance #||= Caren::Storage.shared.build_instance(self.class.node_root)
+      @managed_instance
     end
 
     def destroy
-      !!Caren::Storage.shared.delete_instance(managed_instance) if managed_instance
+      !!self.class.storage_context.delete_instance(managed_instance) if managed_instance
     end
 
     def self.find id
-      new Caren::Storage.shared.find_instance(self.node_root, id)
+      if instance = storage_context.find_instance(self.node_root, id)
+        new instance
+      else
+        nil
+      end
+    end
+
+    def self.all limit=nil, offset=nil
+      storage_context.all(self.node_root,limit, offset).map{ |i| new(i) }
     end
 
     def self.find_or_initialize id
-      new Caren::Storage.shared.find_or_initialize_instance(self.node_root, id)
+      new storage_context.find_or_initialize_instance(self.node_root, id)
     end
 
     def self.entity
@@ -76,6 +92,9 @@ module Caren
             property.name = key
             property.attributeType = options[:type]
             property.optional = (options[:required].nil? ? true : !options[:required])
+            # property.default = options[:default] if options[:default]
+            # property.transient = options[:transient] if options[:transient]
+            # property.indexed = options[:indexed] if options[:indexed]
             property
           end.compact
         end

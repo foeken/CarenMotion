@@ -11,7 +11,7 @@ class SplashController < UIViewController
     if appDelegate.caren.hasCredentials?
       # Show the actual UI
       puts "YEah baby! Login tokens available. We should be showing application UI!"
-      Caren::Person.remote.import(appDelegate.caren)
+      caren.import
     end
   end
 
