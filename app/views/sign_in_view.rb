@@ -8,6 +8,7 @@ class SignInView < DefaultView
 
   def initWithFrame(rect)
     if super
+      self.stylesheet = :signInView
       drawFields
       drawImage
     end
@@ -15,29 +16,19 @@ class SignInView < DefaultView
   end
 
   def drawImage
-    headerView = UIView.alloc.initWithFrame [[0.0, 0.0], [320.0, 195.0]]
-
-    photo = UIImageView.alloc.initWithFrame [[(320.0 / 2) - (126.0 / 2), 39.0], [126.0, 126.0]]
-    photo.image = UIImage.imageNamed "photo_empty.png"
-
-    photoFrame = UIImageView.alloc.initWithFrame [[(320.0 / 2) - (148.0 / 2), 30.0], [148.0, 148.0]]
-    photoFrame.image = UIImage.imageNamed "photo_frame.png"
-
-    headerView.addSubview(photo)
-    headerView.addSubview(photoFrame)
-
+    headerView = UIView.alloc.initWithFrame [[0.0, 0.0], [Device.screen.width, 195.0]]
+    avatar = headerView.subview(UIImageView, :avatar)
+    photoFrame = headerView.subview(UIImageView, :photoFrame)
     @tableView.tableHeaderView = headerView
   end
 
   def drawFields
+    @emailTextField = subview(UITextField, :email, placeholder: _("Email address"))
+    @passwordTextField = subview(UITextField, :password, placeholder: _("Password"))
+    @passwordTextField.secureTextEntry = true
+
     @tableView = GUI.defaultTableViewWithFrame(GUI.defaultTableViewPosition, dataSource:self, delegate:self)
     self.addSubview(@tableView)
-
-    position = GUI.defaultFieldPositionInCell
-
-    @emailTextField = GUI.emailFieldWithFrame(position, delegate:self, placeholder:_("Email address"))
-    @passwordTextField = GUI.passwordFieldWithFrame(position, delegate:self, placeholder:_("Password"))
-    @passwordTextField.returnKeyType = UIReturnKeyDone
 
     enableScrollingOn [@emailTextField, @passwordTextField]
   end
@@ -62,7 +53,7 @@ class SignInView < DefaultView
       end
       section.row do |row|
         row.title = _("I forgot my password")
-        row.reuseIdentifier = "EmailCell"
+        row.reuseIdentifier = "ForgotCell"
         row.cellBuilder = lambda do |row,base|
           GUI.defaultNavigationCellWithIdentifier row.reuseIdentifier
         end

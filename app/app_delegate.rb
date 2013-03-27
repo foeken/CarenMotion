@@ -6,7 +6,6 @@ class AppDelegate
   include AppDelegate::Keyboard
 
   def application(application, didFinishLaunchingWithOptions:launchOptions)
-
     setupConnectionCheck
     setupKeyboard
 

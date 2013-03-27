@@ -2,3 +2,4 @@
 build
 vendor
 pixate.yml
+app/pixate_code.rb

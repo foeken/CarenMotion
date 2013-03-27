@@ -8,7 +8,7 @@ class SplashView < UIImageView
       self.image = UIImage.imageNamed('background_welcome.png')
       self.contentMode = UIViewContentModeTop
       self.userInteractionEnabled = true
-      self.backgroundColor = "#610743".to_color
+      self.backgroundColor = "#610743".uicolor
       drawNavigation
     end
     self

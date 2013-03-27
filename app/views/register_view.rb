@@ -10,32 +10,22 @@ class RegisterView < DefaultView
 
   def initWithFrame(rect)
     if super
+      self.stylesheet = :registerView
       drawFields
     end
     self
   end
 
   def drawFields
+    @firstNameTextField = subview(UITextField, :firstName, placeholder: _("First name"))
+    @lastNameTextField  = subview(UITextField, :lastName, placeholder: _("Last name"))
+    @emailTextField     = subview(UITextField, :email, placeholder: _("Email"))
+    @passwordTextField  = subview(UITextField, :password, placeholder: _("Password"))
+    @genderLabel        = subview(UILabel, :gender, text: _("Male"))
+    @receivesCareSwitch = subview(UISwitch, :receivesCare)
+
     @tableView = GUI.defaultTableViewWithFrame(GUI.defaultTableViewPosition, dataSource:self, delegate:self)
     self.addSubview(@tableView)
-
-    position = GUI.defaultFieldPositionInCell
-
-    @firstNameTextField = GUI.textFieldWithFrame(position, delegate:self, placeholder:_("First name"))
-    @lastNameTextField = GUI.textFieldWithFrame(position, delegate:self, placeholder:_("Last name"))
-    @emailTextField = GUI.emailFieldWithFrame(position, delegate:self, placeholder:_("Email address"))
-    @passwordTextField = GUI.textFieldWithFrame(position, delegate:self, placeholder:_("Password"))
-    @receivesCareSwitch = UISwitch.alloc.init
-    @receivesCareSwitch.onTintColor = "#ca0b7c".to_color
-
-    @genderLabel = UILabel.alloc.init
-    @genderLabel.text = _("Male")
-    @genderLabel.backgroundColor = UIColor.clearColor
-    @genderLabel.font = GUI.defaultFont
-    @genderLabel.color = "#385487".to_color
-    @genderLabel.textAlignment = UITextAlignmentRight
-
-    @passwordTextField.returnKeyType = UIReturnKeyDone
 
     enableScrollingOn [@firstNameTextField,@lastNameTextField,@emailTextField,@passwordTextField]
   end
@@ -102,10 +92,7 @@ class RegisterView < DefaultView
         end
         row.cellBuilder = lambda do |row,base|
           cell = GUI.defaultCellWithIdentifier row.reuseIdentifier
-          changeLabel = UILabel.alloc.init
-          changeLabel.text = _("Tap to change")
-          changeLabel.backgroundColor = UIColor.clearColor
-          changeLabel.font = GUI.labelFont
+          changeLabel = base.subview(UILabel, :tap_to_change_label, text: _("Tap to change"))
 
           Motion::Layout.new do |layout|
             layout.view cell.contentView
@@ -124,10 +111,7 @@ class RegisterView < DefaultView
         row.reuseIdentifier = "ReceiveCareCell"
         row.cellBuilder = lambda do |row,base|
           cell = GUI.defaultCellWithIdentifier row.reuseIdentifier
-          label = UILabel.alloc.init
-          label.text = _("I receive care myself")
-          label.backgroundColor = UIColor.clearColor
-          label.font = GUI.fieldFont
+          label = base.subview(UILabel, :receive_care_label, text: _("I receive care myself"))
           Motion::Layout.new do |layout|
             layout.view cell.contentView
             layout.subviews "switch" => base.receivesCareSwitch, "label" => label
