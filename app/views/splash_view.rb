@@ -6,7 +6,9 @@ class SplashView < UIImageView
   def initWithFrame(rect)
     if super
       self.image = UIImage.imageNamed('background_welcome.png')
+      self.contentMode = UIViewContentModeTop
       self.userInteractionEnabled = true
+      self.backgroundColor = "#610743".to_color
       drawNavigation
     end
     self
@@ -29,7 +31,7 @@ class SplashView < UIImageView
           cell.imageView.image = UIImage.imageNamed("icon_new_user.png")
           cell
         end
-        row.action = lambda do
+        row.action = lambda  do |row,base|
           if appDelegate.connectionActive
             GUI.showController SignInController.alloc.init
           else
@@ -46,7 +48,7 @@ class SplashView < UIImageView
           cell.imageView.image = UIImage.imageNamed("icon_existing_user.png")
           cell
         end
-        row.action = lambda do
+        row.action = lambda  do |row,base|
           if appDelegate.connectionActive
             GUI.showController RegisterController.alloc.init
           else

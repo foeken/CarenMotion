@@ -109,7 +109,7 @@ module TableViewBuilder
 
     if row.action
       if row.action.is_a? Proc
-        row.action.call()
+        row.action.call(row,self)
       else
         if row.target
           row.target.send(row.action)

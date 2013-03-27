@@ -6,7 +6,7 @@ class RegisterView < DefaultView
   attr_accessor :tableView
 
   attr_accessor :firstNameTextField, :lastNameTextField, :emailTextField, :passwordTextField
-  attr_accessor :receivesCareSwitch
+  attr_accessor :receivesCareSwitch, :genderLabel
 
   def initWithFrame(rect)
     if super
@@ -26,6 +26,14 @@ class RegisterView < DefaultView
     @emailTextField = GUI.emailFieldWithFrame(position, delegate:self, placeholder:_("Email address"))
     @passwordTextField = GUI.textFieldWithFrame(position, delegate:self, placeholder:_("Password"))
     @receivesCareSwitch = UISwitch.alloc.init
+    @receivesCareSwitch.onTintColor = "#ca0b7c".to_color
+
+    @genderLabel = UILabel.alloc.init
+    @genderLabel.text = _("Male")
+    @genderLabel.backgroundColor = UIColor.clearColor
+    @genderLabel.font = GUI.defaultFont
+    @genderLabel.color = "#385487".to_color
+    @genderLabel.textAlignment = UITextAlignmentRight
 
     @passwordTextField.returnKeyType = UIReturnKeyDone
 
@@ -85,17 +93,26 @@ class RegisterView < DefaultView
       end
       section.row do |row|
         row.reuseIdentifier = "SexCell"
+        row.action = lambda do |row,base|
+          if base.genderLabel.text == _("Male")
+            base.genderLabel.text = _("Female")
+          else
+            base.genderLabel.text = _("Male")
+          end
+        end
         row.cellBuilder = lambda do |row,base|
           cell = GUI.defaultCellWithIdentifier row.reuseIdentifier
-          label = UILabel.alloc.init
-          label.text = _("Tap to change")
-          label.backgroundColor = UIColor.clearColor
-          label.font = GUI.fieldFont
+          changeLabel = UILabel.alloc.init
+          changeLabel.text = _("Tap to change")
+          changeLabel.backgroundColor = UIColor.clearColor
+          changeLabel.font = GUI.labelFont
+
           Motion::Layout.new do |layout|
             layout.view cell.contentView
-            layout.subviews "label" => label
-            layout.vertical "|[label]|"
-            layout.horizontal "|-10-[label]-10-|"
+            layout.subviews "change_label" => changeLabel, "gender_label" => base.genderLabel
+            layout.vertical "|[change_label]|"
+            layout.vertical "|[gender_label]|"
+            layout.horizontal "|-10-[change_label]-10-[gender_label]-10-|"
           end
           cell
         end
