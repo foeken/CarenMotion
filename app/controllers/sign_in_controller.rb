@@ -1,4 +1,4 @@
-class SignInController < DefaultController
+class SignInController < PopupController
 
   attr_accessor :signInButton
 

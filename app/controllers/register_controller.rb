@@ -1,4 +1,4 @@
-class RegisterController < DefaultController
+class RegisterController < PopupController
 
   attr_accessor :doneButton
 

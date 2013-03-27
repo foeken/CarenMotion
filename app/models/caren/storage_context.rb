@@ -70,7 +70,7 @@ module Caren
 
     def self.stored_classes
       @stored_classes ||= {}.tap do |stored_classes|
-        Caren::Api.available_classes.each do |klass|
+        Caren::Api.availableClasses.each do |klass|
           stored_classes[klass.node_root] = klass
         end
       end

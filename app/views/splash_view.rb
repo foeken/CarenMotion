@@ -31,13 +31,7 @@ class SplashView < UIImageView
           cell.imageView.image = UIImage.imageNamed("icon_new_user.png")
           cell
         end
-        row.action = lambda  do |row,base|
-          if appDelegate.connectionActive
-            GUI.showController SignInController.alloc.init
-          else
-            alert _("No internet connection"), _("You can't do this without an internet connection.")
-          end
-        end
+        row.action = :showSignIn
       end
 
       section.row do |row|
@@ -48,13 +42,7 @@ class SplashView < UIImageView
           cell.imageView.image = UIImage.imageNamed("icon_existing_user.png")
           cell
         end
-        row.action = lambda  do |row,base|
-          if appDelegate.connectionActive
-            GUI.showController RegisterController.alloc.init
-          else
-            alert _("No internet connection"), _("You can't do this without an internet connection.")
-          end
-        end
+        row.action = :showRegister
       end
     end
   end

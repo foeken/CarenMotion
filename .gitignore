@@ -1,5 +1,4 @@
+.DS_Store
 .repl_history
 build
 vendor
-pixate.yml
-app/pixate_code.rb

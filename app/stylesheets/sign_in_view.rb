@@ -4,13 +4,13 @@ Teacup::Stylesheet.new :signInView do
 
   style :avatar,
     image: "photo_empty.png".uiimage,
-    constraints: [ :centered, constrain_top(30) ],
+    constraints: [ :centered, constrain_top(39) ],
     width:  126,
     height: 126
 
   style :photoFrame,
     image: "photo_frame.png".uiimage,
-    constraints: [ :centered ],
+    constraints: [ :centered, constrain_top(30) ],
     width:  148,
     height: 148
 

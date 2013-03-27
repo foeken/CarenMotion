@@ -5,12 +5,12 @@ module Caren
     KEY       = "o2HHwSflL8myngwy8yv3fGNfLSAPmpx6I4Bc0N0w"
     SECRET    = "eDeXOI0l79YhXiO3BFe8eHZxLDuXFsANDjG9iMI6"
 
-    attr_accessor :keychain, :http_client
+    attr_accessor :keychain, :httpClient
 
     def initialize keychain_identifier, database
       @keychain = KeychainItemWrapper.alloc.initWithIdentifier keychain_identifier, accessGroup: nil
 
-      @http_client = AFXAuthClient.alloc.initWithBaseURL NSURL.URLWithString("https://#{SITE}"),
+      @httpClient = AFXAuthClient.alloc.initWithBaseURL NSURL.URLWithString("https://#{SITE}"),
                                                          key: KEY,
                                                          secret: SECRET
 
@@ -18,7 +18,7 @@ module Caren
     end
 
     def getAccessTokenForUsername username, andPassword: password
-      @http_client.authorizeUsingXAuthWithAccessTokenPath "/oauth/access_token",
+      @httpClient.authorizeUsingXAuthWithAccessTokenPath "/oauth/access_token",
                                                           accessMethod: "POST",
                                                           username: username,
                                                           password: password,
@@ -29,12 +29,12 @@ module Caren
                                                           failure: lambda{ |error| Notification.post "GetAccessTokenFailed", error }
     end
 
-    def self.available_classes
+    def self.availableClasses
       [Caren::Person]
     end
 
     def import
-      self.class.available_classes.each{ |k| k.remote.import(self) }
+      self.class.availableClasses.each{ |k| k.remote.import(self) }
     end
 
     def hasCredentials?
@@ -42,31 +42,31 @@ module Caren
     end
 
     def get path, parameters, success, failure
-      http_method "GET", path, parameters, success, failure
+      httpMethod "GET", path, parameters, success, failure
     end
 
     def post path, parameters, success, failure
-      http_method "POST", path, parameters, success, failure
+      httpMethod "POST", path, parameters, success, failure
     end
 
     def put path, parameters, success, failure
-      http_method "PUT", path, parameters, success, failure
+      httpMethod "PUT", path, parameters, success, failure
     end
 
     def delete path, parameters, success, failure
-      http_method "DELETE", path, parameters, success, failure
+      httpMethod "DELETE", path, parameters, success, failure
     end
 
     private
 
-    def http_method method, path, parameters, success, failure
-      request = @http_client.requestWithMethod(method, path: path, parameters: parameters)
+    def httpMethod method, path, parameters, success, failure
+      request = @httpClient.requestWithMethod(method, path: path, parameters: parameters)
       operation = ::AFKissXMLRequestOperation.XMLDocumentRequestOperationWithRequest request, success: success, failure: failure
-      http_client.enqueueHTTPRequestOperation(operation)
+      httpClient.enqueueHTTPRequestOperation(operation)
     end
 
     def setAccessToken
-      @http_client.token = accessToken
+      @httpClient.token = accessToken
     end
 
     def setAndStoreAccessToken token

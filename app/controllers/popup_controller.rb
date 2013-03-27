@@ -1,13 +1,6 @@
-class DefaultController < UIViewController
+class PopupController < ApplicationController
 
   attr_accessor :cancelButton
-
-  def loadView
-    if self.view
-      self.view.controller = self
-      self.view.setNeedsDisplay
-    end
-  end
 
   def viewWillAppear(animated)
     navigationController.setNavigationBarHidden(false, animated:animated)
@@ -19,6 +12,7 @@ class DefaultController < UIViewController
 
     Notification.subscribe UIKeyboardDidHideNotification, action:"keyboardHide", observer:self
     Notification.subscribe UIKeyboardDidShowNotification, action:"keyboardShow", observer:self
+    super
   end
 
   def keyboardHide

@@ -11,50 +11,77 @@ module Caren
       end
 
       def import session
-        session.get resources_path, nil, lambda{ |request,response,doc| import_xml(doc) }, lambda{ |request,response,error,doc| puts doc ; puts 'aap' }
+        session.get resourcesPath, nil, lambda{ |request,response,doc| importXml(doc) }, lambda{ |request,response,error,doc| puts doc }
       end
 
-      def resources_path
+      def self.serialize caren_object
+        doc = DDXMLDocument.alloc.initWithXMLString("<#{caren_object.class.node_root}/>", options:0, error:nil)
+        caren_object.class.properties.each do |key, options|
+          value = caren_object.send(key)
+          case options[:type]
+          when NSBooleanAttributeType
+            if value.present?
+              value = (value == 1 ? "true" : "false")
+            else
+              value = nil
+            end
+          when NSDateAttributeType
+            formatter = NSDateFormatter.alloc.init
+            formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
+            value = formatter.stringFromDate(value)
+          else
+            value = value.to_s
+          end
+          doc.rootElement.addChild( DDXMLNode.elementWithName(key, stringValue: value) )
+        end
+        doc.XMLData
+      end
+
+      def resourcesPath
         "/api/#{@array_root}"
       end
 
-      def resource_path id
+      def resourcePath id
         "#{resources_path}/#{id}"
       end
 
-      def from_xml doc
-        error_pointer = Pointer.new(:object)
-        array_nodes  = doc.nodesForXPath("//#{@array_root}/#{@node_root}", error: error_pointer)
-        single_nodes = doc.nodesForXPath("//#{@node_root}", error: error_pointer)
-        if array_nodes.length > 0
-          return array_nodes.map{ |n| object_from_node(n) }
-        elsif single_nodes.length > 0
-          return object_from_node(single_nodes.first)
+      def fromXml doc
+        errorPtr = Pointer.new(:object)
+        arrayNodes  = doc.nodesForXPath("//#{@array_root}/#{@node_root}", error: errorPtr)
+        singleNodes = doc.nodesForXPath("//#{@node_root}", error: errorPtr)
+        if arrayNodes.length > 0
+          return arrayNodes.map{ |n| objectFromNode(n) }
+        elsif singleNodes.length > 0
+          return objectFromNode(singleNodes.first)
         else
           raise "Unexpected response"
         end
         nil
       end
 
-      def xml_to_key xml
+      def xmlToKey xml
         xml.to_s.gsub("-","_").camelize(false)
       end
 
-      def object_from_node node
+      def objectFromNode node
         attributes = {}
         node.children.each do |child_node|
-          key = xml_to_key(child_node.name)
+          key = xmlToKey(child_node.name)
           if @properties.keys.include?(key.to_sym)
             value = child_node.stringValue
             case @properties[key.to_sym][:type]
             when NSInteger64AttributeType, NSInteger32AttributeType, NSInteger16AttributeType
               value = value.to_i
             when NSBooleanAttributeType
-              value = (value == "true")
+              if value.present?
+                value = (value == "true")
+              else
+                value = nil
+              end
             when NSDateAttributeType
-              date_formatter = NSDateFormatter.alloc.init
-              date_formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
-              value = date_formatter.dateFromString value
+              formatter = NSDateFormatter.alloc.init
+              formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
+              value = formatter.dateFromString value
             end
             attributes[key.to_sym] = value
           end
@@ -66,12 +93,13 @@ module Caren
 
       private
 
-      def import_xml doc
+      def importXml doc
+        puts doc.XMLData
         # Puts the new or updated objects on the save stack
-        added_or_updated_objects = from_xml(doc)
+        objects = fromXml(doc)
 
         # Marks the extra objects for deletion
-        (@klass.all - added_or_updated_objects).map(&:destroy)
+        (@klass.all - objects).map(&:destroy)
 
         # Commit the save
         @storage_context.persist!

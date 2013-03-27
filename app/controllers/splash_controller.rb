@@ -1,9 +1,8 @@
-class SplashController < UIViewController
+class SplashController < ApplicationController
 
   def loadView
     self.view = SplashView.alloc.init
-    self.view.controller = self
-    self.view.setNeedsDisplay
+    super
   end
 
   def viewWillAppear(animated)
@@ -12,6 +11,23 @@ class SplashController < UIViewController
       # Show the actual UI
       puts "YEah baby! Login tokens available. We should be showing application UI!"
       caren.import
+    end
+    super
+  end
+
+  def showRegister
+    if appDelegate.connectionActive
+      GUI.showController RegisterController.alloc.init
+    else
+      alert _("No internet connection"), _("You can't do this without an internet connection.")
+    end
+  end
+
+  def showSignIn
+    if appDelegate.connectionActive
+      GUI.showController SignInController.alloc.init
+    else
+      alert _("No internet connection"), _("You can't do this without an internet connection.")
     end
   end
 
