@@ -1,9 +1,5 @@
 class GUI
 
-  def self.defaultTableViewPosition
-    [[0.0, 0.0], [Device.screen.width, (Device.screen.height - 64.0)]]
-  end
-
   def self.defaultFieldPositionInCell
     [[8, ((43.0 - 20.0) / 2) + 0.5], [280.0, 20.0]]
   end
@@ -29,17 +25,6 @@ class GUI
     cell.selectionStyle = UITableViewCellSelectionStyleNone
     cell.textLabel.font = labelFont
     return cell
-  end
-
-  def self.defaultTableViewWithFrame frame, dataSource:dataSource, delegate:delegate
-    tableView = UITableView.alloc.initWithFrame(frame, style:UITableViewStyleGrouped)
-    tableView.backgroundColor = UIColor.clearColor
-    tableView.opaque = false
-    tableView.backgroundView = nil
-    tableView.dataSource = dataSource
-    tableView.delegate = delegate
-    tableView.separatorColor = UIColor.lightGrayColor
-    return tableView
   end
 
 end

@@ -10,8 +10,25 @@ module Caren
         @storage_context = Caren::StorageContext.api
       end
 
+      def all session, success, failure=nil
+        session.get resourcesPath, nil,
+                    lambda{ |request,response,doc| handleXml(doc,success) },
+                    lambda{ |request,response,error,doc| failure.call(doc) if failure }
+      end
+
+      def create session, caren_object, success, failure=nil
+        session.post resourcesPath, self.class.serialize(caren_object),
+                     lambda{ |request,response,doc| handleXml(doc,success) },
+                     lambda{ |request,response,error,doc| failure.call(doc) if failure }
+      end
+
       def import session
-        session.get resourcesPath, nil, lambda{ |request,response,doc| importXml(doc) }, lambda{ |request,response,error,doc| puts doc }
+        all session, (lambda do |objects|
+          # Marks the extra objects for deletion
+          (@klass.all - objects).map(&:destroy)
+          # And... Commit the save
+          @storage_context.persist!
+        end)
       end
 
       def self.serialize caren_object
@@ -93,16 +110,13 @@ module Caren
 
       private
 
-      def importXml doc
-        puts doc.XMLData
-        # Puts the new or updated objects on the save stack
-        objects = fromXml(doc)
-
-        # Marks the extra objects for deletion
-        (@klass.all - objects).map(&:destroy)
-
-        # Commit the save
-        @storage_context.persist!
+      # We convert the XML to internal objects and run the callback.
+      # The callback is allowed to save the context, after which it is
+      # automatically cleared
+      def handleXml doc, callback
+        object = fromXml(doc)
+        callback.call(object, @storage_context)
+        @storage_context.reset!
       end
 
     end

@@ -14,4 +14,17 @@ Teacup::Stylesheet.new :application do
     backgroundColor: UIColor.clearColor,
     font: "HelveticaNeue-Bold".uifont(16)
 
+  style :defaultTable,
+    backgroundColor: UIColor.clearColor,
+    backgroundView: nil,
+    separatorColor: UIColor.lightGrayColor,
+    width: Device.screen.width,
+    height: Device.screen.height - 64.0
+
+  style :defaultRoot,
+    image: "background_stripes.png".uiimage,
+    userInteractionEnabled: true
+
+  style :root, extends: :defaultRoot
+
 end

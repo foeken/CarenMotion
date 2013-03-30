@@ -10,16 +10,18 @@ module Caren
       @remote ||= Caren::Remote::Proxy.new(self, array_root, node_root, properties)
     end
 
-    def self.local
-      @managed_instance
-    end
-
+    # Properties are routed to the managed_instance or set to an instance variable when there is no instance
+    # or if the instance is not tracking those fields.
     def self.property(name, type=nil, options={})
       @properties ||= {}
       @properties[name] = options.merge(:type => type)
       if type
-        define_method "#{name}"  { managed_instance.send("#{name}") }
-        define_method "#{name}=" { |args| managed_instance.send("#{name}=", args) }
+        define_method "#{name}"  do
+          managed_instance ? managed_instance.send("#{name}") : instance_variable_get("@#{name}")
+        end
+        define_method "#{name}=" do |args|
+          managed_instance ? managed_instance.send("#{name}=", args) : instance_variable_set("@#{name}", args)
+        end
       else
         attr_accessor name
       end
@@ -51,9 +53,7 @@ module Caren
       :object
     end
 
-    # CoreData Methods
-
-    def initialize(instance)
+    def initialize(instance=nil)
       @managed_instance = instance
       super()
     end

@@ -2,9 +2,10 @@ class RegisterController < PopupController
 
   attr_accessor :doneButton
 
-  def loadView
-    self.view = RegisterView.alloc.init
-    super
+  stylesheet :registerView
+
+  layout do
+    self.view = layout(RegisterView, :root, controller: self)
   end
 
   def viewWillAppear(animated)
@@ -15,7 +16,17 @@ class RegisterController < PopupController
 
   def clickedDoneButton
     self.view.dismissKeyboard
-    # TODO: Handle New registration
+
+    newPerson = Caren::Person.new
+    newPerson.email = view.emailTextField
+    # ... TODO
+
+    Caren::Person.remote.create caren, newPerson,
+                                lambda do |person, context|
+                                  # Save the new person locally
+                                  context.persist!
+                                  # TODO: Show the waiting for e-mail screen.
+                                end
   end
 
 end

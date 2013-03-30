@@ -10,25 +10,24 @@ class SignInView < DefaultView
     if super
       self.stylesheet = :signInView
       drawFields
-      drawImage
+      drawHeader
     end
     self
   end
 
-  def drawImage
-    headerView = UIView.alloc.initWithFrame [[0.0, 0.0], [Device.screen.width, 195.0]]
-    avatar = headerView.subview(UIImageView, :avatar)
-    photoFrame = headerView.subview(UIImageView, :photoFrame)
-    @tableView.tableHeaderView = headerView
+  def drawHeader
+    @tableView.tableHeaderView = UIView.alloc.initWithFrame [[0.0, 0.0], [Device.screen.width, 195.0]]
+    @tableView.tableHeaderView.subview(UIImageView, :avatar)
+    @tableView.tableHeaderView.subview(UIImageView, :photoFrame)
   end
 
   def drawFields
     @emailTextField = subview(UITextField, :email, placeholder: _("Email address"))
     @passwordTextField = subview(UITextField, :password, placeholder: _("Password"))
-    @passwordTextField.secureTextEntry = true
+    @tableView = subview(UITableView.alloc.initWithFrame(CGRect.new, style:UITableViewStyleGrouped), :defaultTable, dataSource:self, delegate:self)
 
-    @tableView = GUI.defaultTableViewWithFrame(GUI.defaultTableViewPosition, dataSource:self, delegate:self)
-    self.addSubview(@tableView)
+    # TODO: Remove when Teacup#dummy.rb is updated
+    @passwordTextField.secureTextEntry = true
 
     enableScrollingOn [@emailTextField, @passwordTextField]
   end

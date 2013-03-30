@@ -2,9 +2,10 @@ class SignInController < PopupController
 
   attr_accessor :signInButton
 
-  def loadView
-    self.view = SignInView.alloc.init
-    super
+  stylesheet :signInView
+
+  layout do
+    self.view = layout(SignInView, :root, controller: self)
   end
 
   def viewWillAppear(animated)

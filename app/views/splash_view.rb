@@ -5,20 +5,13 @@ class SplashView < UIImageView
 
   def initWithFrame(rect)
     if super
-      self.image = UIImage.imageNamed('background_welcome.png')
-      self.contentMode = UIViewContentModeTop
-      self.userInteractionEnabled = true
-      self.backgroundColor = "#610743".uicolor
       drawNavigation
     end
     self
   end
 
   def drawNavigation
-    position = [[0.0, (Device.screen.height - 99.0 - 70.0)], [Device.screen.width, 99.0]]
-    @tableView = GUI.defaultTableViewWithFrame(position, dataSource:self, delegate:self)
-    @tableView.scrollEnabled = false
-    self.addSubview(@tableView)
+    @tableView = subview(UITableView.alloc.initWithFrame(CGRect.new, style:UITableViewStyleGrouped), :menu, dataSource:self, delegate:self)
   end
 
   TableViewBuilder do |table|

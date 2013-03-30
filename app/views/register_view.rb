@@ -23,9 +23,7 @@ class RegisterView < DefaultView
     @passwordTextField  = subview(UITextField, :password, placeholder: _("Password"))
     @genderLabel        = subview(UILabel, :gender, text: _("Male"))
     @receivesCareSwitch = subview(UISwitch, :receivesCare)
-
-    @tableView = GUI.defaultTableViewWithFrame(GUI.defaultTableViewPosition, dataSource:self, delegate:self)
-    self.addSubview(@tableView)
+    @tableView          = subview(UITableView.alloc.initWithFrame(CGRect.new, style:UITableViewStyleGrouped), :defaultTable, dataSource:self, delegate:self)
 
     enableScrollingOn [@firstNameTextField,@lastNameTextField,@emailTextField,@passwordTextField]
   end
@@ -109,6 +107,9 @@ class RegisterView < DefaultView
     table.section do |section|
       section.row do |row|
         row.reuseIdentifier = "ReceiveCareCell"
+        row.action = lambda do |row,base|
+          base.receivesCareSwitch.setOn(!base.receivesCareSwitch.on?, animated:true)
+        end
         row.cellBuilder = lambda do |row,base|
           cell = GUI.defaultCellWithIdentifier row.reuseIdentifier
           label = base.subview(UILabel, :receive_care_label, text: _("I receive care myself"))

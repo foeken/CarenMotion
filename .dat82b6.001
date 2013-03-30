@@ -1,0 +1,196 @@
+subviews
+self.subviews
+quit
+cd "/Users/foeken/Projects/CarenMotion"
+rake
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+exit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+UIViewAutoresizingFlexibleLeftMargin
+quit
+quit
+160 - (126/2)
+quit
+160 - (148/2)
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+exit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+exit
+a = DDXMLDocument.alloc.init
+a.rootElement
+a = DDXMLDocument.alloc.initWithRootElement(DDXMLNode.elementWithName("KeePassFile"))
+a = DDXMLDocument.alloc.initWithXMLString("<people/>")
+a = DDXMLDocument.initWithXMLString("<people/>")
+NSXMLDocument.alloc.initWithXMLString("<people/>", options:0, error:nil)
+DDXMLDocument.alloc.initWithXMLString("<people/>", options:0, error:nil)
+DDXMLDocument.alloc.initWithXMLString("<people/>", options:0, error:nil).prettyXMl
+DDXMLDocument.alloc.initWithXMLString("<people/>", options:0, error:nil).prettyXMLString
+DDXMLDocument.alloc.initWithXMLString("<people/>", options:0, error:nil).rootElement.prettyXMLString
+DDXMLDocument.alloc.initWithXMLString("<people/>", options:0, error:nil).rootElement.XMLData
+DDXMLDocument.alloc.initWithXMLString("<people/>", options:0, error:nil).XMLData
+[].is_a?(Array)
+a
+aDDXMLDocument.alloc.initWithXMLString("<people/>", options:0, error:nil)
+a = DDXMLDocument.alloc.initWithXMLString("<people/>", options:0, error:nil)
+a.addChild( DDXMLNode.elementWithName("person") )
+a.rootElement.addChild( DDXMLNode.elementWithName("person") )
+a
+a.XMLData
+quit
+Caren::Person.find(4)
+Caren::Person.find(4).email
+a = Caren::Person.find(4)
+Caren::Remote::Proxy.serialize(a)
+Caren::Remote::Proxy.serialize(Caren::Person.find(4))
+a
+a.atrributes
+a.attrributes
+a.attributes
+a.atrributesquit
+cd "/Users/foeken/Projects/CarenMotion"
+rake
+quit
+Caren::Remote::Proxy.serialize(Caren::Person.find(4))
+true.class
+true.is_a?(Boolean)
+true.is_a?(BooleanClass)
+true.is_a?(BoolClass)
+a
+a = Caren::Person.find(4)
+a.attributes
+quit
+Caren::Remote::Proxy.serialize(Caren::Person.find(4))
+a.attributes
+a = Caren::Person.find(4)
+a.attributes
+a.attributes[:eventRemindersViaEmailEnabled]
+quit
+quit
+quit
+quit
+quit
+quit
+Caren::Remote::Proxy.serialize(Caren::Person.find(4))
+quit
+Caren::Remote::Proxy.serialize(Caren::Person.find(4))
+Caren::Remote::Proxy.serialize(Caren::Person.find(4))
+exit
+exit
+Caren::Remote::Proxy.serialize(Caren::Person.find(4))
+quit
+Caren::Remote::Proxy.serialize(Caren::Person.find(4))
+exit
+quit
+quit
+Caren::Person.new
+Caren::Person.new(nil)
+Caren::Person.new(nil).email
+a = Caren::Person.new(nil)
+a.email = "test"
+a.email
+a.attributes
+quit
+exit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+quit
+self.subviews
+quit
+cd "/Users/foeken/Projects/CarenMotion"
+rake
+quit
