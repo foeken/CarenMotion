@@ -5,12 +5,12 @@ class SplashView < UIImageView
 
   def initWithFrame(rect)
     if super
-      drawNavigation
+      render
     end
     self
   end
 
-  def drawNavigation
+  def render
     @tableView = subview(UITableView.alloc.initWithFrame(CGRect.new, style:UITableViewStyleGrouped), :menu, dataSource:self, delegate:self)
   end
 

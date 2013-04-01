@@ -11,6 +11,7 @@ class SignInController < PopupController
   def viewWillAppear(animated)
     @signInButton = GUI.squareBarButtonWithTitle _("Sign in"), target:self, action:"clickedSignInButton"
     self.navigationItem.rightBarButtonItem = @signInButton
+    self.navigationItem.titleView = UIImageView.alloc.initWithImage "navigationbar_title.png".uiimage
     super
   end
 

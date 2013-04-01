@@ -6,13 +6,11 @@ class SignInView < DefaultView
   attr_accessor :tableView
   attr_accessor :emailTextField, :passwordTextField
 
-  def initWithFrame(rect)
-    if super
-      self.stylesheet = :signInView
-      drawFields
-      drawHeader
-    end
-    self
+  stylesheet :signInView
+
+  def render
+    drawFields
+    drawHeader
   end
 
   def drawHeader

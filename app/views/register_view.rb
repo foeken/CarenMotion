@@ -8,15 +8,9 @@ class RegisterView < DefaultView
   attr_accessor :firstNameTextField, :lastNameTextField, :emailTextField, :passwordTextField
   attr_accessor :receivesCareSwitch, :genderLabel
 
-  def initWithFrame(rect)
-    if super
-      self.stylesheet = :registerView
-      drawFields
-    end
-    self
-  end
+  stylesheet :registerView
 
-  def drawFields
+  def render
     @firstNameTextField = subview(UITextField, :firstName, placeholder: _("First name"))
     @lastNameTextField  = subview(UITextField, :lastName, placeholder: _("Last name"))
     @emailTextField     = subview(UITextField, :email, placeholder: _("Email"))

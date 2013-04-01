@@ -11,7 +11,7 @@ class SplashController < ApplicationController
     if appDelegate.caren.hasCredentials?
       # Show the actual UI
       puts "YEah baby! Login tokens available. We should be showing application UI!"
-      # caren.import
+      caren.import
     end
     super
   end

@@ -23,13 +23,11 @@ module Caren
         define_method "#{name}"  do
           managed_instance ? managed_instance.send("#{name}") : instance_variable_get("@#{name}")
         end
-        unless options[:readonly]
-          define_method "#{name}=" do |args|
-            managed_instance ? managed_instance.send("#{name}=", args) : instance_variable_set("@#{name}", args)
-          end
+        define_method "#{name}=" do |args|
+          managed_instance ? managed_instance.send("#{name}=", args) : instance_variable_set("@#{name}", args)
         end
       else
-        options[:readonly] ? attr_reader(name) : attr_accessor(name)
+        attr_accessor(name)
       end
     end
 
@@ -78,6 +76,11 @@ module Caren
       else
         nil
       end
+    end
+
+    def self.where conditions, *args
+      predicate = NSPredicate.predicateWithFormat(conditions, argumentArray:args)
+      self.storage_context.where(self.node_root,predicate).map{ |i| new(i) }
     end
 
     def ==(other)

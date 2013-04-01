@@ -8,8 +8,6 @@ class PopupController < ApplicationController
     @cancelButton = GUI.squareCancelBarButtonWithTarget self, action:"clickedCancelButton"
     self.navigationItem.leftBarButtonItem = @cancelButton
 
-    self.navigationItem.titleView = UIImageView.alloc.initWithImage UIImage.imageNamed("navigationbar_title.png")
-
     Notification.subscribe UIKeyboardDidHideNotification, action:"keyboardHide", observer:self
     Notification.subscribe UIKeyboardDidShowNotification, action:"keyboardShow", observer:self
     super

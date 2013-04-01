@@ -12,7 +12,7 @@ class GUI
     navigation = UINavigationController.alloc.initWithRootViewController( controller )
     navigation.modalTransitionStyle = modalTransitionStyle
     GUI.customizeNavigationController(navigation, backgroundImage:"navigationbar_background.png")
-    appDelegate.navigationController.presentModalViewController(navigation, animated:true)
+    appDelegate.navigationController.presentViewController(navigation, animated:true, completion: nil)
   end
 
 end

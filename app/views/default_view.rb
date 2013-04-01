@@ -1,2 +1,0 @@
-class DefaultView < UIImageView
-end

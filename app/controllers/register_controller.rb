@@ -9,8 +9,9 @@ class RegisterController < PopupController
   end
 
   def viewWillAppear(animated)
-    @doneButton = GUI.squareBarButtonWithTitle _("Done"), target:self, action:"clickedDoneButton"
+    @doneButton = GUI.squareBarButtonWithTitle _("Continue"), target:self, action:"clickedDoneButton"
     self.navigationItem.rightBarButtonItem = @doneButton
+    self.title = _("Register")
     super
   end
 
@@ -37,12 +38,16 @@ class RegisterController < PopupController
     newPerson.receivesCare  = fieldMapping[:receivesCare].on?
     newPerson.linkProtocol  = "caren://"
 
+    setLoading(true)
     Caren::Person.remote.create(caren, newPerson) do |person, context, errors|
+      setLoading(false)
       if errors
         alert _("Could not sign you up"), errors.join("\n")
+        # TODO: Remove this test
+        navigationController.pushViewController( CheckInboxController.alloc.init, animated: true)
       else
         context.persist!
-        # TODO: Show the waiting for e-mail screen.
+        navigationController.pushViewController( CheckInboxController.alloc.init, animated: true)
       end
     end
 
