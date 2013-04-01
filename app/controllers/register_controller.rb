@@ -14,23 +14,32 @@ class RegisterController < PopupController
     super
   end
 
+  def fieldMapping
+    {
+      email: view.emailTextField,
+      firstName: view.firstNameTextField,
+      lastName: view.lastNameTextField,
+      password: view.passwordTextField,
+      male: view.genderLabel,
+      receivesCare: view.receivesCareSwitch
+    }
+  end
+
   def clickedDoneButton
     self.view.dismissKeyboard
 
     newPerson               = Caren::Person.new
-    newPerson.email         = view.emailTextField.text
-    newPerson.firstName     = view.firstNameTextField.text
-    newPerson.lastName      = view.lastNameTextField.text
-    newPerson.password      = view.passwordTextField.text
-    newPerson.male          = (view.genderLabel.text == _("Male"))
-    newPerson.receivesCare  = view.receivesCareSwitch.on?
+    newPerson.email         = fieldMapping[:email].text
+    newPerson.firstName     = fieldMapping[:firstName].text
+    newPerson.lastName      = fieldMapping[:lastName].text
+    newPerson.password      = fieldMapping[:password].text
+    newPerson.male          = fieldMapping[:male].text == _("Male")
+    newPerson.receivesCare  = fieldMapping[:receivesCare].on?
     newPerson.linkProtocol  = "caren://"
 
-    Caren::Person.remote.create(caren, newPerson) do |person, context, error|
-      if error
-        # TODO Handle validations centrally
-        NSLog("Error creating account: %@", error)
-        alert _("Could not create new account"), _("Fill out all of the fields and try again!")
+    Caren::Person.remote.create(caren, newPerson) do |person, context, errors|
+      if errors
+        alert _("Could not sign you up"), errors.join("\n")
       else
         context.persist!
         # TODO: Show the waiting for e-mail screen.

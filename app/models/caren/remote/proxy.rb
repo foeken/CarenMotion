@@ -19,15 +19,15 @@ module Caren
       end
 
       def create session, carenObject, &block
-        session.post resourcesPath, self.class.serialize(carenObject), successCallback(block), failureCallback(block)
+        session.post resourcesPath, self.class.serialize(carenObject), successCallback(block), failureCallback(block, carenObject)
       end
 
       def update session, carenObject, &block
-        session.put resourcePath(carenObject.id), self.class.serialize(carenObject), successCallback(block), failureCallback(block)
+        session.put resourcePath(carenObject.id), self.class.serialize(carenObject), successCallback(block), failureCallback(block, carenObject)
       end
 
       def destroy session, carenObject, &block
-        session.delete resourcePath(carenObject.id), successCallback(block), failureCallback(block)
+        session.delete resourcePath(carenObject.id), successCallback(block), failureCallback(block, carenObject)
       end
 
       def import session
@@ -128,9 +128,20 @@ module Caren
         end
       end
 
-      def failureCallback(block)
+      def parseErrors doc
+        doc.rootElement.children.map do |node|
+          case node.attributeForName(:category).stringValue
+          when "validation"
+            Caren::Remote::ValidationError.new( xmlToKey(node.attributeForName(:on).stringValue), node.stringValue )
+          else
+            Caren::Remote::Error.new( node.stringValue )
+          end
+        end
+      end
+
+      def failureCallback(block, object=nil)
         lambda do |request,response,error,doc|
-          block.call(nil, @storage_context, error)
+          block.call(object, @storage_context, parseErrors(doc), error)
         end
       end
 

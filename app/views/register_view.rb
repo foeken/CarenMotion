@@ -21,7 +21,7 @@ class RegisterView < DefaultView
     @lastNameTextField  = subview(UITextField, :lastName, placeholder: _("Last name"))
     @emailTextField     = subview(UITextField, :email, placeholder: _("Email"))
     @passwordTextField  = subview(UITextField, :password, placeholder: _("Password"))
-    @genderLabel        = subview(UILabel, :gender, text: _("Male"))
+    @genderLabel        = subview(UILabel, :gender, text: _("Female"))
     @receivesCareSwitch = subview(UISwitch, :receivesCare)
     @tableView          = subview(UITableView.alloc.initWithFrame(CGRect.new, style:UITableViewStyleGrouped), :defaultTable, dataSource:self, delegate:self)
 
