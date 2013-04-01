@@ -10,6 +10,10 @@ module Caren
       @remote ||= Caren::Remote::Proxy.new(self, array_root, node_root, properties)
     end
 
+    def toXml
+      Caren::Remote::Proxy.serialize(self)
+    end
+
     # Properties are routed to the managed_instance or set to an instance variable when there is no instance
     # or if the instance is not tracking those fields.
     def self.property(name, type=nil, options={})
@@ -19,11 +23,13 @@ module Caren
         define_method "#{name}"  do
           managed_instance ? managed_instance.send("#{name}") : instance_variable_get("@#{name}")
         end
-        define_method "#{name}=" do |args|
-          managed_instance ? managed_instance.send("#{name}=", args) : instance_variable_set("@#{name}", args)
+        unless options[:readonly]
+          define_method "#{name}=" do |args|
+            managed_instance ? managed_instance.send("#{name}=", args) : instance_variable_set("@#{name}", args)
+          end
         end
       else
-        attr_accessor name
+        options[:readonly] ? attr_reader(name) : attr_accessor(name)
       end
     end
 

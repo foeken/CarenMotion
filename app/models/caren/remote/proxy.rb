@@ -10,30 +10,42 @@ module Caren
         @storage_context = Caren::StorageContext.api
       end
 
-      def all session, success, failure=nil
-        session.get resourcesPath, nil,
-                    lambda{ |request,response,doc| handleXml(doc,success) },
-                    lambda{ |request,response,error,doc| failure.call(doc) if failure }
+      def all session, &block
+        session.get resourcesPath, successCallback(block), failureCallback(block)
       end
 
-      def create session, caren_object, success, failure=nil
-        session.post resourcesPath, self.class.serialize(caren_object),
-                     lambda{ |request,response,doc| handleXml(doc,success) },
-                     lambda{ |request,response,error,doc| failure.call(doc) if failure }
+      def find session, id, &block
+        session.get resourcePath(id), successCallback(block), failureCallback(block)
+      end
+
+      def create session, carenObject, &block
+        session.post resourcesPath, self.class.serialize(carenObject), successCallback(block), failureCallback(block)
+      end
+
+      def update session, carenObject, &block
+        session.put resourcePath(carenObject.id), self.class.serialize(carenObject), successCallback(block), failureCallback(block)
+      end
+
+      def destroy session, carenObject, &block
+        session.delete resourcePath(carenObject.id), successCallback(block), failureCallback(block)
       end
 
       def import session
-        all session, (lambda do |objects|
-          # Marks the extra objects for deletion
-          (@klass.all - objects).map(&:destroy)
-          # And... Commit the save
-          @storage_context.persist!
-        end)
+        all(session) do |objects, context, error|
+          if error
+            # Handle error
+          else
+            # Marks the extra objects for deletion and persist!
+            (@klass.all - objects).map(&:destroy)
+            @storage_context.persist!
+          end
+        end
       end
 
       def self.serialize caren_object
         doc = DDXMLDocument.alloc.initWithXMLString("<#{caren_object.class.node_root}/>", options:0, error:nil)
         caren_object.class.properties.each do |key, options|
+          next if options[:readonly]
           value = caren_object.send(key)
           case options[:type]
           when NSBooleanAttributeType
@@ -46,10 +58,8 @@ module Caren
             formatter = NSDateFormatter.alloc.init
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
             value = formatter.stringFromDate(value)
-          else
-            value = value.to_s
           end
-          doc.rootElement.addChild( DDXMLNode.elementWithName(key, stringValue: value) )
+          doc.rootElement.addChild( DDXMLNode.elementWithName(key, stringValue: value.to_s) ) unless value.nil?
         end
         doc.XMLData
       end
@@ -110,13 +120,18 @@ module Caren
 
       private
 
-      # We convert the XML to internal objects and run the callback.
-      # The callback is allowed to save the context, after which it is
-      # automatically cleared
-      def handleXml doc, callback
-        object = fromXml(doc)
-        callback.call(object, @storage_context)
-        @storage_context.reset!
+      def successCallback(block)
+        lambda do |request,response,doc|
+          object = fromXml(doc)
+          block.call(object, @storage_context, nil)
+          @storage_context.reset!
+        end
+      end
+
+      def failureCallback(block)
+        lambda do |request,response,error,doc|
+          block.call(nil, @storage_context, error)
+        end
       end
 
     end

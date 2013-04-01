@@ -1,32 +1,38 @@
 module Caren
   class Api
 
-    SITE      = "caren-cares.com"
     KEY       = "o2HHwSflL8myngwy8yv3fGNfLSAPmpx6I4Bc0N0w"
     SECRET    = "eDeXOI0l79YhXiO3BFe8eHZxLDuXFsANDjG9iMI6"
 
     attr_accessor :keychain, :httpClient
 
-    def initialize keychain_identifier, database
+    def site
+      case @locale
+      when :en
+        "caren-cares.com"
+      when :nl
+        "carenzorgt.nl"
+      end
+    end
+
+    def initialize keychain_identifier, database, locale=:en
+      @locale = locale
       @keychain = KeychainItemWrapper.alloc.initWithIdentifier keychain_identifier, accessGroup: nil
 
-      @httpClient = AFXAuthClient.alloc.initWithBaseURL NSURL.URLWithString("https://#{SITE}"),
+      @httpClient = AFXAuthClient.alloc.initWithBaseURL NSURL.URLWithString("https://#{site}"),
                                                          key: KEY,
                                                          secret: SECRET
 
       setAccessToken if hasCredentials?
     end
 
-    def getAccessTokenForUsername username, andPassword: password
+    def getAccessTokenForUsername username, andPassword: password, &block
       @httpClient.authorizeUsingXAuthWithAccessTokenPath "/oauth/access_token",
                                                           accessMethod: "POST",
                                                           username: username,
                                                           password: password,
-                                                          success: (lambda do |token|
-                                                                      Notification.post "GetAccessTokenSucceeded"
-                                                                      setAndStoreAccessToken(token)
-                                                                   end),
-                                                          failure: lambda{ |error| Notification.post "GetAccessTokenFailed", error }
+                                                          success: lambda { |token| setAndStoreAccessToken(token) ; block.call(token, nil) },
+                                                          failure: lambda { |error| block.call(nil, error) }
     end
 
     def self.availableClasses
@@ -41,26 +47,27 @@ module Caren
       accessTokenKey.present? && accessTokenSecret.present?
     end
 
-    def get path, parameters, success, failure
-      httpMethod "GET", path, parameters, success, failure
+    def get path, success, failure
+      httpMethod "GET", path, nil, success, failure
     end
 
-    def post path, parameters, success, failure
-      httpMethod "POST", path, parameters, success, failure
+    def post path, body, success, failure
+      httpMethod "POST", path, body, success, failure
     end
 
-    def put path, parameters, success, failure
-      httpMethod "PUT", path, parameters, success, failure
+    def put path, body, success, failure
+      httpMethod "PUT", path, body, success, failure
     end
 
-    def delete path, parameters, success, failure
-      httpMethod "DELETE", path, parameters, success, failure
+    def delete path, success, failure
+      httpMethod "DELETE", path, nil, success, failure
     end
 
     private
 
-    def httpMethod method, path, parameters, success, failure
-      request = @httpClient.requestWithMethod(method, path: path, parameters: parameters)
+    def httpMethod method, path, body, success, failure
+      request = @httpClient.requestWithMethod(method, path: path, parameters: nil)
+      request.HTTPBody = body
       operation = ::AFKissXMLRequestOperation.XMLDocumentRequestOperationWithRequest request, success: success, failure: failure
       httpClient.enqueueHTTPRequestOperation(operation)
     end

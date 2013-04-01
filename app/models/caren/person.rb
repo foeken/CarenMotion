@@ -1,19 +1,19 @@
 module Caren
   class Person < Base
 
-    property :id, ::NSInteger64AttributeType, :required => true
-    property :ownerId, ::NSInteger64AttributeType
+    property :id, ::NSInteger64AttributeType, :required => true, :readonly => true
+    property :ownerId, ::NSInteger64AttributeType, :readonly => true
     property :firstName, ::NSStringAttributeType
     property :lastName, ::NSStringAttributeType
     property :male, ::NSBooleanAttributeType
 
     property :email, ::NSStringAttributeType
-    property :account, ::NSBooleanAttributeType
-    property :me, ::NSBooleanAttributeType
+    property :account, ::NSBooleanAttributeType, :readonly => true
+    property :me, ::NSBooleanAttributeType, :readonly => true
     property :receivesCare, ::NSBooleanAttributeType
 
     property :dateOfBirth, ::NSDateAttributeType
-    property :photo, ::NSStringAttributeType
+    property :photo, ::NSStringAttributeType, :readonly => true
     property :timeZone, ::NSStringAttributeType
 
     property :bio, ::NSStringAttributeType
@@ -24,8 +24,8 @@ module Caren
     property :messageNotificationsViaEmailEnabled, ::NSBooleanAttributeType
     property :messageNotificationsViaPhoneEnabled, ::NSBooleanAttributeType
 
-    property :createdAt, ::NSDateAttributeType
-    property :updatedAt, ::NSDateAttributeType
+    property :createdAt, ::NSDateAttributeType, :readonly => true
+    property :updatedAt, ::NSDateAttributeType, :readonly => true
 
     # Non tracked fields
     property :password
