@@ -15,6 +15,10 @@ class CheckInboxController < ApplicationController
     super
   end
 
+  def viewDidAppear(animated)
+    self.view.animateEnvelope()
+  end
+
   def clickedRefreshButton
     setLoading(true)
     setLoading(false)

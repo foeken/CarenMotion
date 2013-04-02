@@ -33,6 +33,10 @@ module Caren
     property :oldPassword
     property :linkProtocol
 
+    def self.remote
+      @remote ||= Caren::Remote::Person.new(self, array_root, node_root, properties)
+    end
+
     def self.array_root
       :people
     end

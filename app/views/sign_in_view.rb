@@ -20,14 +20,31 @@ class SignInView < DefaultView
   end
 
   def drawFields
-    @emailTextField = subview(UITextField, :email, placeholder: _("Email address"))
-    @passwordTextField = subview(UITextField, :password, placeholder: _("Password"))
+    @emailTextField = subview(UITextField, :email, placeholder: _("Email address"), delegate: self)
+    @passwordTextField = subview(UITextField, :password, placeholder: _("Password"), delegate: self)
     @tableView = subview(UITableView.alloc.initWithFrame(CGRect.new, style:UITableViewStyleGrouped), :defaultTable, dataSource:self, delegate:self)
 
     # TODO: Remove when Teacup#dummy.rb is updated
     @passwordTextField.secureTextEntry = true
 
     enableScrollingOn [@emailTextField, @passwordTextField]
+  end
+
+  def forgotPasswordAlert
+    alert = UIAlertView.alloc.initWithTitle _("Enter your email address:\n\n"),
+                                    message:"",
+                                    delegate: self,
+                                    cancelButtonTitle:_("Cancel"),
+                                    otherButtonTitles:_("OK"), nil
+    alert.stylesheet = :signInView
+    @forgotEmailTextField = alert.subview(UITextField, :forgotEmail, text: @emailTextField.text)
+    alert.show
+  end
+
+  def alertView alert, didDismissWithButtonIndex: buttonIndex
+    if buttonIndex == 1
+      self.controller.forgotPassword @forgotEmailTextField.text
+    end
   end
 
   TableViewBuilder do |table|
@@ -50,6 +67,7 @@ class SignInView < DefaultView
       end
       section.row do |row|
         row.title = _("I forgot my password")
+        row.action = lambda{ |row,base| base.forgotPasswordAlert }
         row.reuseIdentifier = "ForgotCell"
         row.cellBuilder = lambda do |row,base|
           GUI.defaultNavigationCellWithIdentifier row.reuseIdentifier

@@ -17,6 +17,12 @@ class AppDelegate
     true
   end
 
+  def application application, handleOpenURL:url
+    if attrs = url.absoluteString.match(/caren:\/\/people\/(.*)\/activate\/(.*)/).captures
+      RegisterController.activatePerson(attrs.first,attrs.last)
+    end
+  end
+
   def caren
     @caren ||= Caren::Api.new( "CarenAccessTokenAndSecret", "caren.sqlite" )
   end

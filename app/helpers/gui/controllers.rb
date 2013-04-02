@@ -1,10 +1,11 @@
 class GUI
 
-  def self.hideController controller
-    controller.dismissModalViewControllerAnimated(true)
+  def self.hideController controller, animated=true
+    controller.dismissModalViewControllerAnimated(animated) if controller
   end
 
-  def self.showController controller
+  def self.showController controller, force=false
+    GUI.hideController(App.delegate.navigationController.presentedViewController, false) if force
     GUI.showController(controller, modalTransitionStyle:UIModalTransitionStyleCoverVertical)
   end
 

@@ -9,7 +9,7 @@ class SignInController < PopupController
   end
 
   def viewWillAppear(animated)
-    @signInButton = GUI.squareBarButtonWithTitle _("Sign in"), target:self, action:"clickedSignInButton"
+    @signInButton = GUI.squareBarButtonWithTitle _("Sign in"), target:self, action:"signIn"
     self.navigationItem.rightBarButtonItem = @signInButton
     self.navigationItem.titleView = UIImageView.alloc.initWithImage "navigationbar_title.png".uiimage
     super
@@ -19,7 +19,18 @@ class SignInController < PopupController
     !self.view.emailTextField.text.nil? && !self.view.passwordTextField.text.nil?
   end
 
-  def clickedSignInButton
+  def forgotPassword email
+    Caren::Person.remote.forgotPassword(caren, email) do |person, context, errors|
+      if errors
+        alert _("Could not reset password"), errors.join("\n")
+      else
+        # TODO: Do it properly and hook into the link-protocol API to handle resetting the password internally. (also broken in original app)
+        alert _("Password reset mail sent"), _("We sent you an email with reset instructions.")
+      end
+    end
+  end
+
+  def signIn
     if signInPossible?
       self.view.dismissKeyboard
       setLoading(true)

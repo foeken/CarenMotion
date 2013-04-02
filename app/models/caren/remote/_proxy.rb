@@ -59,8 +59,9 @@ module Caren
             formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZZZZ"
             value = formatter.stringFromDate(value)
           end
-          doc.rootElement.addChild( DDXMLNode.elementWithName(key, stringValue: value.to_s) ) unless value.nil?
+          doc.rootElement.addChild( DDXMLNode.elementWithName(keyToXml(key), stringValue: value.to_s) ) unless value.nil?
         end
+        puts doc.XMLData
         doc.XMLData
       end
 
@@ -69,7 +70,7 @@ module Caren
       end
 
       def resourcePath id
-        "#{resources_path}/#{id}"
+        "#{resourcesPath}/#{id}"
       end
 
       def fromXml doc
@@ -88,6 +89,10 @@ module Caren
 
       def xmlToKey xml
         xml.to_s.gsub("-","_").camelize(false)
+      end
+
+      def self.keyToXml key
+        key.to_s.underscore.gsub("_","-")
       end
 
       def objectFromNode node
@@ -129,6 +134,7 @@ module Caren
       end
 
       def parseErrors doc
+        return [] unless doc
         doc.rootElement.children.map do |node|
           case node.attributeForName(:category).stringValue
           when "validation"
@@ -141,7 +147,13 @@ module Caren
 
       def failureCallback(block, object=nil)
         lambda do |request,response,error,doc|
-          block.call(object, @storage_context, parseErrors(doc), error)
+          case response.statusCode
+          when 200,201,204
+            # The XML parsing failed, but the request acually succeeded, so that's okay.
+            block.call(object, @storage_context, nil)
+          else
+            block.call(object, @storage_context, parseErrors(doc), error)
+          end
         end
       end
 

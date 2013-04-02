@@ -27,4 +27,9 @@ Motion::Project::App.setup do |app|
     app.seed_id + '.' + app.identifier
   ]
 
+  app.info_plist['CFBundleURLTypes'] = [
+    { 'CFBundleURLName' => 'com.nedap.caren',
+      'CFBundleURLSchemes' => ['caren'] }
+  ]
+
 end

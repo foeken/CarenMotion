@@ -2,7 +2,7 @@ Teacup::Stylesheet.new :checkInboxView do
 
   import :application
 
-  style :envelop,
+  style :envelope,
     image: "registered_envelop.png".uiimage,
     contentMode: UIViewContentModeTop,
     constraints: [ :centered, constrain_top(33) ],

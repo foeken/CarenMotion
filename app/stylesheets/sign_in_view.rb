@@ -17,6 +17,12 @@ Teacup::Stylesheet.new :signInView do
   style :email,
     keyboardType: UIKeyboardTypeEmailAddress
 
+  style :forgotEmail,
+    keyboardType: UIKeyboardTypeEmailAddress,
+    autocorrectionType: UITextAutocorrectionTypeNo,
+    backgroundColor: UIColor.whiteColor,
+    frame: [[12.0, 45.0], [260.0, 25.0]]
+
   style :password,
     returnKeyType: UIReturnKeyDone
 

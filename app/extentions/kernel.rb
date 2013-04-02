@@ -1,5 +1,4 @@
 module Kernel
-  private
 
   # Gettext like translation string syntax
   def _(key,value="")

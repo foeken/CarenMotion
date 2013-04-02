@@ -8,11 +8,6 @@ class SplashController < ApplicationController
 
   def viewWillAppear(animated)
     navigationController.setNavigationBarHidden(true, animated:animated)
-    if appDelegate.caren.hasCredentials?
-      # Show the actual UI
-      puts "YEah baby! Login tokens available. We should be showing application UI!"
-      caren.import
-    end
     super
   end
 

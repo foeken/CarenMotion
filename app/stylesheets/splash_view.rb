@@ -11,6 +11,7 @@ Teacup::Stylesheet.new :splashView do
   style :menu, extends: :defaultTable,
     scrollEnabled: false,
     height: 99,
-    top: (Device.screen.height - 169.0)
+    top: (Device.screen.height - 169.0),
+    separatorColor: UIColor.clearColor
 
 end

@@ -17,7 +17,8 @@ Teacup::Stylesheet.new :application do
   style :defaultTable,
     backgroundColor: UIColor.clearColor,
     backgroundView: nil,
-    separatorColor: UIColor.lightGrayColor,
+    separatorColor: "#c6cace".uicolor,
+    separatorStyle: UITableViewCellSeparatorStyleNone,
     width: Device.screen.width,
     height: Device.screen.height - 64.0
 

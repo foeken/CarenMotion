@@ -34,14 +34,14 @@ end
 
     # Increase the size of the tableview to the full bounds
     def increaseTableViewFrame
-      GUI.withKeyboardAnimation do
-        @tableView.setFrame self.bounds
-      end
-      self.performSelector "scrollToFirstResponder", withObject:nil, afterDelay:0.1
+      @tableView.setFrame self.bounds
     end
 
     def dismissKeyboard
-      firstResponder.resignFirstResponder if firstResponder = self.findFirstResponder
+      if firstResponder = self.findFirstResponder
+        increaseTableViewFrame
+        firstResponder.resignFirstResponder
+      end
     end
 
   end
